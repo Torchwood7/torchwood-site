@@ -82,7 +82,7 @@ trait Netatmo_Client {
      * @return  array     The netatmo collected datas.
      * @since    1.0.0
      */
-    public function get_datas() {
+    public function get_datas($connect_mode=false) {
         if (get_option('live_weather_station_owm_account')[1] == 2) {
             $this->netatmo_datas = array ();
             return array();
@@ -112,7 +112,9 @@ trait Netatmo_Client {
                     case 23:
                     case 32:
                         $this->last_netatmo_error = __('Wrong credentials. Please, verify your login and password.', 'live-weather-station');
-                        update_option('live_weather_station_netatmo_account', array('', '', false));
+                        if ($connect_mode) {
+                            update_option('live_weather_station_netatmo_account', array('', '', false));
+                        }
                         break;
                     case 5:
                     case 22:
@@ -124,8 +126,12 @@ trait Netatmo_Client {
                     default:
                         $this->last_netatmo_warning = __('Temporary unable to contact Netatmo servers. Retry will be done shortly.', 'live-weather-station');
                 }
+                //error_log('#### '.$ex->getCode() . ' - ' . $ex->getMessage());
                 return array();
             }
+        }
+        else {
+            //error_log('#### Unable to find access tokens');
         }
         return $this->netatmo_datas;
     }

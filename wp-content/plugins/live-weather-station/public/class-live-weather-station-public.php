@@ -63,13 +63,14 @@ class Live_Weather_Station_Public {
      */
     public function register_scripts() {
         wp_register_script( 'lws-lcd.js', LWS_PUBLIC_URL.'js/lws-lcd.min.js', array('jquery'), $this->version, true );
+        wp_register_script( 'raphael.js', LWS_PUBLIC_URL.'js/raphael.min.js', array('jquery'), $this->version, true );
+        wp_register_script( 'justgage.js', LWS_PUBLIC_URL.'js/justgage.min.js', array('raphael.js'), $this->version, true );
     }
 
 	/**
 	 * Callback method for querying datas by the lcd control.
 	 *
 	 * @since    1.0.0
-	 * @access	public
 	 */
 	public function lws_query_lcd_datas_callback() {
         $device_id = wp_kses($_POST['device_id'], array());
@@ -139,6 +140,43 @@ class Live_Weather_Station_Public {
                 $response = $datas['datas'];
             }
         }
+        exit (json_encode ($response));
+    }
+
+    /**
+     * Callback method for querying config for the clean gauge control.
+     *
+     * @since    2.1.0
+     */
+    public function lws_query_justgage_config_callback() {
+        $_attributes = array();
+        $_attributes['id'] = wp_kses($_POST['id'], array());
+        $_attributes['device_id'] = wp_kses($_POST['device_id'], array());
+        $_attributes['module_id'] = wp_kses($_POST['module_id'], array());
+        $_attributes['measure_type'] = wp_kses($_POST['measure_type'], array());
+        $_attributes['design'] = wp_kses($_POST['design'], array());
+        $_attributes['color'] = wp_kses($_POST['color'], array());
+        $_attributes['pointer'] = wp_kses($_POST['pointer'], array());
+        $_attributes['title'] = wp_kses($_POST['title'], array());
+        $_attributes['subtitle'] = wp_kses($_POST['subtitle'], array());
+        $_attributes['unit'] = wp_kses($_POST['unit'], array());
+        $_attributes['size'] = wp_kses($_POST['size'], array());
+        $response = $this->justgage_attributes($_attributes);
+        exit (json_encode ($response));
+    }
+
+    /**
+     * Callback method for querying datas by the clean gauge control.
+     *
+     * @since    2.1.0
+     */
+    public function lws_query_justgage_datas_callback() {
+        $_attributes = array();
+        //$_attributes['id'] = wp_kses($_POST['id'], array());
+        $_attributes['device_id'] = wp_kses($_POST['device_id'], array());
+        $_attributes['module_id'] = wp_kses($_POST['module_id'], array());
+        $_attributes['measure_type'] = wp_kses($_POST['measure_type'], array());
+        $response = $this->justgage_value($_attributes);
         exit (json_encode ($response));
     }
 }

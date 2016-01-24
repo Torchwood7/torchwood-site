@@ -130,15 +130,43 @@ trait Owm_Client {
         $result['battery_vp'] = 6000;
         $result['rf_status'] = 0;
         $result['firmware'] = LWS_VERSION;
+        $result['data_type'] = array();
         $dashboard = array() ;
         $dashboard['time_utc'] = $weather['dt'];
-        $dashboard['weather'] = $weather['weather'][0]['id'];
-        $dashboard['temperature'] = $weather['main']['temp'];
-        $dashboard['pressure'] = $weather['main']['pressure'];
-        $dashboard['humidity'] = $weather['main']['humidity'];
+        if (array_key_exists('weather', $weather) && is_array($weather['weather']) && isset($weather['weather'][0]['id'])) {
+            $dashboard['weather'] = $weather['weather'][0]['id'];
+            $result['data_type'][] = 'weather';
+        }
+        else {
+            $dashboard['weather'] = 0;
+            $result['data_type'][] = 'weather';
+        }
+        if (array_key_exists('main', $weather) && isset($weather['main']['temp'])) {
+            $dashboard['temperature'] = $weather['main']['temp'];
+            $result['data_type'][] = 'temperature';
+        }
+        else {
+            $dashboard['temperature'] = 0;
+        }
+        if (array_key_exists('main', $weather) && isset($weather['main']['pressure'])) {
+            $dashboard['pressure'] = $weather['main']['pressure'];
+            $result['data_type'][] = 'pressure';
+        }
+        else {
+            $dashboard['pressure'] = 0;
+        }
+        if (array_key_exists('main', $weather) && isset($weather['main']['humidity'])) {
+            $dashboard['humidity'] = $weather['main']['humidity'];
+            $result['data_type'][] = 'humidity';
+        }
+        else {
+            $dashboard['humidity'] = 0;
+        }
         if (array_key_exists('wind', $weather) && isset($weather['wind']['deg']) && isset($weather['wind']['speed'])) {
             $dashboard['windangle'] = round($weather['wind']['deg']);
             $dashboard['windstrength'] = round($weather['wind']['speed'] * 3.6);
+            $result['data_type'][] = 'windangle';
+            $result['data_type'][] = 'windstrength';
         }
         else {
             $dashboard['windangle'] = 0;
@@ -146,34 +174,37 @@ trait Owm_Client {
         }
         if (array_key_exists('rain', $weather) && isset($weather['rain']['3h'])) {
             $dashboard['rain'] = $weather['rain']['3h'];
+            $result['data_type'][] = 'rain';
         }
         else {
             $dashboard['rain'] = 0;
         }
         if (array_key_exists('snow', $weather) && isset($weather['snow']['3h'])) {
             $dashboard['snow'] = $weather['snow']['3h'];
+            $result['data_type'][] = 'snow';
         }
         else {
             $dashboard['snow'] = 0;
         }
         if (array_key_exists('clouds', $weather) && isset($weather['clouds']['all'])) {
             $dashboard['cloudiness'] = $weather['clouds']['all'];
+            $result['data_type'][] = 'cloudiness';
         }
         else {
             $dashboard['cloudiness'] = 0;
         }
-        $dashboard['sunrise'] = $weather['sys']['sunrise'];
-        $dashboard['sunset'] = $weather['sys']['sunset'];
-        $now = time();
-        if ($dashboard['sunrise'] < $now && $dashboard['sunset'] > $now) {
-            $dashboard['is_day'] = 1;
+        if (array_key_exists('sys', $weather) && is_array($weather['sys']) && isset($weather['sys']['sunrise']) && isset($weather['sys']['sunset'])) {
+            $now = time();
+            if ($weather['sys']['sunrise'] < $now && $weather['sys']['sunset'] > $now) {
+                $dashboard['is_day'] = 1;
+            }
+            else {
+                $dashboard['is_day'] = 0;
+            }
+            $result['data_type'][] = 'is_day';
         }
-        else {
-            $dashboard['is_day'] = 0;
-        }
-
         $result['dashboard_data'] = $dashboard;
-        $result['data_type'] = array('weather', 'temperature','pressure', 'humidity', 'windstrength', 'windangle', 'rain', 'snow', 'cloudiness', 'sunrise', 'sunset', 'is_day');
+        //$result['data_type'] = array('weather', 'temperature','pressure', 'humidity', 'windstrength', 'windangle', 'rain', 'snow', 'cloudiness', 'sunrise', 'sunset', 'is_day');
         return $result;
     }
     /**

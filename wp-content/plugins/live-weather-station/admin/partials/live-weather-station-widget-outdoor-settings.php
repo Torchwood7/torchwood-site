@@ -56,11 +56,9 @@
     <br/>
     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('show_windchill'); ?>" name="<?php echo $this->get_field_name('show_windchill'); ?>"<?php checked( $show_windchill ); ?> />
     <label for="<?php echo $this->get_field_id('show_windchill'); ?>"><?php esc_html_e( 'Display wind chill (if available)' , 'live-weather-station'); ?></label>
-    <?php /*
     <br/>
-    <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('show_location'); ?>" name="<?php echo $this->get_field_name('show_location'); ?>"<?php checked( $show_location ); ?> />
-    <label for="<?php echo $this->get_field_id('show_location'); ?>"><?php esc_html_e( 'Display coordinates (if available)' , 'live-weather-station'); ?></label>
-    */ ?>
+    <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('hide_obsolete'); ?>" name="<?php echo $this->get_field_name('hide_obsolete'); ?>"<?php checked( $hide_obsolete ); ?> />
+    <label for="<?php echo $this->get_field_id('hide_obsolete'); ?>"><?php esc_html_e( 'Hide obsolete measurements' , 'live-weather-station'); ?></label>
 </p>
 <hr>
 <p>

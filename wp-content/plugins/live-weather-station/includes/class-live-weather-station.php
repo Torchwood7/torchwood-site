@@ -138,8 +138,13 @@ class Live_Weather_Station {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'register_scripts' );
 		$this->loader->add_action( 'wp_ajax_lws_query_lcd_datas', $plugin_public, 'lws_query_lcd_datas_callback' );
 		$this->loader->add_action( 'wp_ajax_nopriv_lws_query_lcd_datas', $plugin_public, 'lws_query_lcd_datas_callback' );
+		$this->loader->add_action( 'wp_ajax_lws_query_justgage_config', $plugin_public, 'lws_query_justgage_config_callback' );
+		$this->loader->add_action( 'wp_ajax_nopriv_lws_query_justgage_config', $plugin_public, 'lws_query_justgage_config_callback' );
+		$this->loader->add_action( 'wp_ajax_lws_query_justgage_datas', $plugin_public, 'lws_query_justgage_datas_callback' );
+		$this->loader->add_action( 'wp_ajax_nopriv_lws_query_justgage_datas', $plugin_public, 'lws_query_justgage_datas_callback' );
         add_shortcode( 'live-weather-station-textual', array($plugin_public, 'textual_shortcodes') );
         add_shortcode( 'live-weather-station-lcd', array($plugin_public, 'lcd_shortcodes') );
+		add_shortcode( 'live-weather-station-justgage', array($plugin_public, 'justgage_shortcodes') );
 	}
 
 	/**

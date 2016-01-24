@@ -182,15 +182,19 @@ trait Unit_Conversion {
     protected function get_pressure($value, $id = 0)
     {
         $result = $value;
+        $format = '%d';
+        $prec = 0;
         switch ($id) {
             case 1:  // P(inHg) = P(hPa) / 33.8639
                 $result = $result / 33.8639;
+                $format = '%.2F';
+                $prec = 2;
                 break;
             case 2:  // P(mmHg) = P(hPa) / 1.33322368
                 $result = $result / 1.33322368;
                 break;
         }
-        return sprintf('%d', round($result, 0));
+        return sprintf($format, round($result, $prec));
     }
 
     /**

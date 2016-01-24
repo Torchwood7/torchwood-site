@@ -64,6 +64,443 @@ trait Datas_Output {
     }
 
     /**
+     * Get value for clean gauge element.
+     *
+     * @return  string  $attributes The value queryed.
+     * @since    2.1.0
+     */
+    public function justgage_value($attributes, $full=false)
+    {
+        $_attributes = shortcode_atts(array('device_id' => '', 'module_id' => '', 'measure_type' => '', 'element' => '', 'format' => ''), $attributes);
+        $_result = $this->get_line_datas($_attributes, false, true);
+        $result = array();
+        if (empty($_result)) {
+            $value = 0;
+            $precision = 0;
+            $min = 0;
+            $max = 0;
+            if ($full) {
+                $result['type'] = $this->get_measurement_type($_attributes['measure_type']);
+                $result['unit'] = $this->output_unit($_attributes['measure_type'])['unit'];
+                $_attributes['measure_type'] = 'sos';
+                $_result = $this->get_line_datas($_attributes, false, true);
+                $master = $_result[0];
+                if (count($_result) > 0) {
+                    $result['station'] = $master['device_name'];
+                    $result['module'] = $master['module_name'];
+                } else {
+                    $result['station'] = '';
+                    $result['module'] = '';
+                }
+            }
+        }
+        else {
+            $master = $_result[0];
+            if (count($_result) > 1) {
+                foreach ($_result as $line) {
+                    if ($line['measure_type'] == $_attributes['measure_type']) {
+                        $master = $line;
+                    }
+                }
+            }
+            $module_type = $master['module_type'];
+            $measure_type = $master['measure_type'];
+            $value = $this->output_value($master['measure_value'], $measure_type);
+            $precision = $this->decimal_for_output($measure_type);
+            $min = round($this->output_value($this->get_measurement_min($measure_type, $module_type), $measure_type));
+            $max = round($this->output_value($this->get_measurement_max($measure_type, $module_type), $measure_type));
+            if ($measure_type == 'temperature' && (get_option('live_weather_station_settings')[7] == 1)) {
+                $min_t = array();
+                $max_t = array();
+                foreach ($_result as $line) {
+                    if ($line['measure_type'] == 'temperature_min') {
+                        $min_t = $line;
+                    }
+                    if ($line['measure_type'] == 'temperature_max') {
+                        $max_t = $line;
+                    }
+                }
+                if (!empty($min_t) && !empty($max_t)) {
+                    $min = $min_t['measure_value'];
+                    $max = $max_t['measure_value'];
+                    $delta = 3 ;
+                    if (strtolower($module_type)=='namodule1' || strtolower($module_type)=='nacurrent') {
+                        $delta = 6 ;
+                    }
+                    if ($min <= $max) {
+                        $min = round($this->output_value($min - $delta, $measure_type));
+                        $max = round($this->output_value($max + $delta, $measure_type));
+                    }
+                }
+            }
+            if ($full) {
+                $result['station'] = $master['device_name'];
+                $result['module'] = $master['module_name'];
+                $result['type'] = $this->get_measurement_type($measure_type);
+                $result['unit'] = $this->output_unit($measure_type)['unit'];
+            }
+        }
+        $result['value'] = round($value, $precision);
+        $result['decimals'] = $precision;
+        $result['min'] = $min;
+        $result['max'] = $max;
+        if ($full && substr($result['module'], 0, 1) == '[') {
+            $result['module'] = __('Outdoor', 'live-weather-station');
+        }
+        return $result;
+    }
+
+    /**
+     * Stringify an array of labels.
+     *
+     * @return  string  $attributes The attributes of the value queryed by the shortcode.
+     * @since    2.1.0
+     */
+    private function get_txt($source, $val) {
+        $r = '';
+        if (count($source) > 0 && $source[0] != 'none') {
+            foreach ($source as $s) {
+                if (strlen($r) > 0) {
+                    if ($s == 'unit') {$b_sep = ' ('; $e_sep = ')';}
+                    else { $b_sep = ' - '; $e_sep = '';}
+                }
+                else { $b_sep = ''; $e_sep = '';}
+                $r = $r . $b_sep . $val[$s] . $e_sep;
+            }
+        }
+        return $r;
+    }
+
+    /**
+     * Get attributes for clean gauge shortcodes.
+     *
+     * @return  string  $attributes The attributes of the value queryed by the shortcode.
+     * @since    2.1.0
+     */
+    public function justgage_attributes($attributes) {
+        $result = array();
+        $result['id'] = $attributes['id'];
+
+        // POINTER
+        $pointerOptions = array();
+        $result['pointer'] = ($attributes['pointer'] != 'none');
+        switch ($attributes['pointer']) {
+            case 'external':
+                $pointerOptions['toplength'] = 4;
+                break;
+            case 'internal':
+                $pointerOptions['toplength'] = -4;
+                break;
+        }
+
+        // SIZE
+        $pb = array();
+        switch ($attributes['size']) {
+            case 'micro':
+                $result['width'] = 75;
+                $result['height'] = 75;
+                $result['relativeGaugeSize'] = false;
+                $result['hideMinMax'] = true;
+                break;
+            case 'small':
+                $result['width'] = 100;
+                $result['height'] = 100;
+                $result['relativeGaugeSize'] = false;
+                $pointerOptions['bottomwidth'] = 2 ;
+                $pb['thin']['external'] = -10;
+                $pb['thin']['internal'] = 6;
+                $pb['standard']['external'] = -14;
+                $pb['standard']['internal'] = 2;
+                $pb['fat']['external'] = -20;
+                $pb['fat']['internal'] = -4;
+                $pb['pie']['external'] = -48;
+                $pb['pie']['internal'] = -32;
+                $pb['full']['external'] = -44;
+                $pb['full']['internal'] = -27;
+                break;
+            case 'medium':
+                $result['width'] = 225;
+                $result['height'] = 225;
+                $result['relativeGaugeSize'] = false;
+                $pointerOptions['bottomwidth'] = 5 ;
+                $pb['thin']['external'] = -17;
+                $pb['thin']['internal'] = 7;
+                $pb['standard']['external'] = -26;
+                $pb['standard']['internal'] = -1;
+                $pb['fat']['external'] = -39;
+                $pb['fat']['internal'] = -15;
+                $pb['pie']['external'] = -103;
+                $pb['pie']['internal'] = -78;
+                $pb['full']['external'] = -93;
+                $pb['full']['internal'] = -68;
+                break;
+            case 'large':
+                $result['width'] = 350;
+                $result['height'] = 350;
+                $pointerOptions['bottomwidth'] = 8 ;
+                $pb['thin']['external'] = -24;
+                $pb['thin']['internal'] = 0;
+                $pb['standard']['external'] = -38;
+                $pb['standard']['internal'] = -3;
+                $pb['fat']['external'] = -59;
+                $pb['fat']['internal'] = -25;
+                $pb['pie']['external'] = -158;
+                $pb['pie']['internal'] = -124;
+                $pb['full']['external'] = -142;
+                $pb['full']['internal'] = -108;
+                break;
+            case 'scalable':
+                $result['relativeGaugeSize'] = true;
+                $pointerOptions['bottomwidth'] = 5 ;
+                $pb['thin']['external'] = -16;
+                $pb['thin']['internal'] = 8;
+                $pb['standard']['external'] = -23;
+                $pb['standard']['internal'] = -1;
+                $pb['fat']['external'] = -34;
+                $pb['fat']['internal'] = -11;
+                $pb['pie']['external'] = -87;
+                $pb['pie']['internal'] = -64;
+                $pb['full']['external'] = -65;
+                $pb['full']['internal'] = -41;
+                break;
+        }
+
+        // DESIGN
+        $design = explode('-',$attributes['design']);
+        $result['donut'] = (in_array('full', $design));
+        if (in_array('thin', $design)) {
+            $result['gaugeWidthScale'] = 0.15;
+            if ($result['pointer']) {
+                $pointerOptions['bottomlength'] = $pb['thin'][$attributes['pointer']];
+            }
+            if ($attributes['size'] == 'large' && $attributes['pointer'] == 'internal') {
+                $pointerOptions['toplength'] = -8;
+                $pointerOptions['bottomlength'] = 13;
+            }
+        }
+        if (in_array('standard', $design)) {
+            $result['gaugeWidthScale'] = 0.40;
+            if ($result['pointer']) {
+                $pointerOptions['bottomlength'] = $pb['standard'][$attributes['pointer']];
+            }
+            if ($attributes['size'] == 'small' && $attributes['pointer'] == 'internal') {
+                $pointerOptions['toplength'] = -6;
+                $pointerOptions['bottomlength'] = 4;
+            }
+            if ($attributes['size'] == 'scalable' && $attributes['pointer'] == 'internal') {
+                $pointerOptions['toplength'] = -2;
+            }
+            if ($result['donut']) {
+                if ($attributes['size'] == 'scalable' && $attributes['pointer'] == 'internal') {
+                    $pointerOptions['bottomlength'] = -1;
+                    $pointerOptions['toplength'] = 0;
+                }
+                if ($attributes['size'] == 'scalable' && $attributes['pointer'] == 'external') {
+                    $pointerOptions['bottomlength'] = -21;
+                }
+            }
+        }
+        if (in_array('fat', $design)) {
+            $result['gaugeWidthScale'] = 0.80;
+            if ($result['pointer']) {
+                $pointerOptions['bottomlength'] = $pb['fat'][$attributes['pointer']];
+            }
+            if ($result['donut']) {
+                if ($attributes['size'] == 'scalable' && $attributes['pointer'] == 'internal') {
+                    $pointerOptions['bottomlength'] = -6;
+                }
+                if ($attributes['size'] == 'scalable' && $attributes['pointer'] == 'external') {
+                    $pointerOptions['bottomlength'] = -30;
+                }
+            }
+        }
+        if (in_array('pie', $design)) {
+            $result['gaugeWidthScale'] = ($result['donut'] ? 2.38 : 2.68);
+            $result['hideMinMax'] = true;
+            if ($result['pointer']) {
+                $pointerOptions['bottomlength'] = $pb['pie'][$attributes['pointer']];
+                if ($result['donut']) {
+                    $pointerOptions['bottomlength'] = $pb['full'][$attributes['pointer']];
+                }
+            }
+        }
+        $result['shadowOpacity'] = (in_array('flat', $design) ? 0 : $result['gaugeWidthScale']/2.5);
+        $result['counter'] = 0;
+
+        // COLORS
+        $color = explode('-',$attributes['color']);
+        // text
+        if (in_array('lgt', $color)) {
+            $result['titleFontColor'] = '#999999';
+            $result['valueFontColor'] = '#010101';
+            $result['labelFontColor'] = '#B3B3B3';
+        }
+        if (in_array('drk', $color)) {
+            $result['titleFontColor'] = '#999999';
+            if (in_array('pie', $design)) {
+                $result['valueFontColor'] = '#333333';
+            }
+            else {
+                $result['valueFontColor'] = '#FEFEFE';
+            }
+            if ($result['donut']) {
+                $result['labelFontColor'] = '#B3B3B3';
+            }
+            else {
+                $result['labelFontColor'] = '#777777';
+            }
+        }
+        if (in_array('transparent', $color)) {
+            $result['levelColors'] = ['#EDEBEB'];
+        }
+        if (in_array('flag', $color)) {
+            $result['levelColors'] = ['#0C58AC', '#BCAEFA', '#C30404'];
+        }
+        if (in_array('pinky', $color)) {
+            $result['levelColors'] = ['#970000', '#A100BE', '#FF18EC'];
+        }
+        if (in_array('aquamarine', $color)) {
+            $result['levelColors'] = ['#4E61C3', '#2D7EF7', '#00EDF0'];
+        }
+        if (in_array('bw', $color)) {
+            $result['levelColors'] = ['#EDEBEB', '#000000'];
+        }
+        if (in_array('solidred', $color)) {
+            $result['levelColors'] = ['#C30404'];
+        }
+        if (in_array('solidorange', $color)) {
+            $result['levelColors'] = ['#FE9500'];
+        }
+        if (in_array('solidyellow', $color)) {
+            $result['levelColors'] = ['#F1EE12'];
+        }
+        if (in_array('solidgreen', $color)) {
+            $result['levelColors'] = ['#00C312'];
+        }
+        if (in_array('solidblue', $color)) {
+            $result['levelColors'] = ['#0C58AC'];
+        }
+        if (in_array('solidpurple', $color)) {
+            $result['levelColors'] = ['#6600B4'];
+        }
+        if (in_array('solidblack', $color)) {
+            $result['levelColors'] = ['#000000'];
+        }
+        $pointerOptions['color'] = $result['valueFontColor'] ;
+        if (in_array('lgt', $color)) {
+            $pointerOptions['color'] = '#333333' ;
+        }
+        if (in_array('drk', $color) && $attributes['pointer'] == 'internal') {
+            switch ($attributes['size']) {
+                case 'small':
+                    if (in_array('fat', $design)) {
+                        $pointerOptions['color'] = '#333333' ;
+                    }
+                    break;
+                case 'medium':
+                case 'large':
+                case 'scalable':
+                    if (in_array('standard', $design) || in_array('fat', $design)) {
+                        $pointerOptions['color'] = '#333333' ;
+                    }
+                    break;
+            }
+        }
+        if (in_array('drk', $color) && $attributes['pointer'] == 'external' && in_array('pie', $design)) {
+            $pointerOptions['color'] = '#FEFEFE' ;
+        }
+        $values = $this->justgage_value($attributes, true);
+
+        // DATAS
+        $result['value'] = $values['value'];
+        if ($result['donut']) {
+            $result['min'] = 0;
+        }
+        else {
+            $result['min'] = $values['min'];
+        }
+        $result['max'] = $values['max'];
+        $result['decimals'] = $values['decimals'];
+
+        // TEXTS
+        if ($attributes['unit'] == 'unit') {
+            $result['symbol'] = $values['unit'];
+        }
+        $result['title'] = $this->get_txt(explode('-',$attributes['title']), $values);
+        $result['label'] = $this->get_txt(explode('-',$attributes['subtitle']), $values);
+        $result['counter'] = true;
+        if ($result['pointer']) {
+            $result['pointerOptions'] = $pointerOptions;
+        }
+        if (!$result['donut']) {
+            unset($result['donut']);
+        }
+        return $result;
+    }
+
+    /**
+     * Get value for clean gauge shortcodes.
+     *
+     * @return  string  $attributes The value queryed by the shortcode.
+     * @since    2.1.0
+     */
+    public function justgage_shortcodes($attributes) {
+        $fingerprint = uniqid('', true);
+        $uniq = 'jgg'.substr ($fingerprint, count($fingerprint)-6, 80);
+        $time = 1000 * (120 + rand(-20, 20));
+        $_attributes = shortcode_atts( array('id' => $uniq,'device_id' => '','module_id' => '','measure_type' => '','design' => '','color' => '','pointer' => '','title' => '','subtitle' => '','unit' => '','size' => ''), $attributes );
+        $sc_device = $_attributes['device_id'];
+        $sc_module = $_attributes['module_id'];
+        $sc_measurement = $_attributes['measure_type'];
+        $values = json_encode($this->justgage_attributes($_attributes));
+        switch ($attributes['size']) {
+            case 'small':
+                $h = '100px';
+                $w = '100px';
+                break;
+            case 'medium':
+                $h = '225px';
+                $w = '225px';
+                break;
+            case 'large':
+                $h = '350px';
+                $w = '350px';
+                break;
+            case 'scalable':
+                $h = '100%';
+                $w = '100%';
+                break;
+        }
+        $style = 'width:'.$w.';height:'.$h.';';
+        wp_enqueue_script( 'justgage.js' );
+        $result  = '<div id="'.$uniq.'" style="'.$style.'"></div>'.PHP_EOL;
+        $result .= '<script language="javascript" type="text/javascript">'.PHP_EOL;
+        $result .= '  jQuery(document).ready(function($) {'.PHP_EOL;
+        $result .= '    var g'.$uniq.' = new JustGage('.$values.');'.PHP_EOL;
+        $result .= '  setInterval(function() {'.PHP_EOL;
+        $result .= '    var http = new XMLHttpRequest();'.PHP_EOL;
+        $result .= '    var params = "action=lws_query_justgage_datas";'.PHP_EOL;
+        $result .= '    params = params+"&device_id='.$sc_device.'";'.PHP_EOL;
+        $result .= '    params = params+"&module_id='.$sc_module.'";'.PHP_EOL;
+        $result .= '    params = params+"&measure_type='.$sc_measurement.'";'.PHP_EOL;
+        $result .= '    http.open("POST", "/wp-admin/admin-ajax.php", true);'.PHP_EOL;
+        $result .= '    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");'.PHP_EOL;
+        $result .= '    http.onreadystatechange = function () {'.PHP_EOL;
+        $result .= '      if (http.readyState == 4 && http.status == 200) {'.PHP_EOL;
+        $result .= '        var odatas = JSON.parse(http.responseText);'.PHP_EOL;
+        $result .= '        if ( typeof odatas != "undefined") {'.PHP_EOL;
+        $result .= '          g'.$uniq.'.refresh(odatas.value, odatas.max);'.PHP_EOL;
+        $result .= '        }'.PHP_EOL;
+        $result .= '      }'.PHP_EOL;
+        $result .= '    }'.PHP_EOL;
+        $result .= '    http.send(params);'.PHP_EOL;
+        $result .= '  }, '.$time.');'.PHP_EOL;
+        $result .= '});'.PHP_EOL;
+        $result .= '</script>'.PHP_EOL;
+        return $result;
+    }
+
+    /**
      * Get value for textual shortcodes.
      *
      * @return  string  $attributes The value queryed by the shortcode.
@@ -695,6 +1132,37 @@ trait Datas_Output {
     }
 
     /**
+     * How decimals to display for this type of value.
+     *
+     * @param   string  $type   The type of the value.
+     * @return  integer   The number of decimals to show.
+     * @since    2.1.0
+     */
+    protected function decimal_for_output($type) {
+        $result = 0;
+        switch ($type) {
+            case 'rain':
+            case 'rain_hour_aggregated':
+            case 'rain_day_aggregated':
+            case 'temperature':
+            case 'temperature_min':
+            case 'temperature_max':
+            case 'temperature_ref':
+            case 'dew_point':
+            case 'frost_point':
+            case 'wind_chill':
+                $result = 1 ;
+                break;
+            case 'pressure':
+                if (get_option('live_weather_station_settings')[1] == 1) {
+                    $result = 2 ;
+                }
+                break;
+        }
+        return $result;
+    }
+
+    /**
      * Get a human readable time zone.
      *
      * @param   string  $timezone  Standardized timezone string
@@ -771,8 +1239,8 @@ trait Datas_Output {
             case 'temperature':
             case 'temperature_min':
             case 'temperature_max':
-            $result = __('temperature', 'live-weather-station') ;
-            break;
+                $result = __('temperature', 'live-weather-station') ;
+                break;
         }
         return $result;
     }
@@ -1645,6 +2113,132 @@ trait Datas_Output {
         $result = false;
         if ( ($temp_ref >= 15) && ($hum_ref>=20) && ($dew_ref>=10)) {
             $result = true;
+        }
+        return $result;
+    }
+
+    /**
+     * Get the measurement minimal rendered value.
+     *
+     * @param   string      $type           The type of the value.
+     * @param   string      $module_type    The type of the module.
+     * @return  integer  The the measurement minimal to render in controls.
+     * @since    2.1.0
+     */
+    protected function get_measurement_min ($type, $module_type) {
+        switch (strtolower($type)) {
+            case 'pressure':
+                $result = 900;
+                break;
+            case 'temperature':
+            case 'temperature_ref':
+            case 'temperature_max':
+            case 'max_temp':
+            case 'temperature_min':
+            case 'min_temp':
+                if (strtolower($module_type)=='namodule1' || strtolower($module_type)=='nacurrent') {
+                    $result = -20;
+                }
+                else {
+                    $result = 10;
+                }
+                break;
+            case 'dew_point':
+                $result = 0;
+                break;
+            case 'frost_point':
+                $result = -20;
+                break;
+            case 'heat_index':
+                $result = 20;
+                break;
+            case 'humidex':
+                $result = 20;
+                break;
+            case 'wind_chill':
+                $result = -40;
+                break;
+            default:
+                $result = 0;
+        }
+        return $result;
+    }
+
+    /**
+     * Get the measurement maximal rendered value.
+     *
+     * @param   string      $type           The type of the value.
+     * @param   string      $module_type    The type of the module.
+     * @return  integer  The the measurement maximal to render in controls.
+     * @since    2.1.0
+     */
+    protected function get_measurement_max ($type, $module_type) {
+        switch (strtolower($type)) {
+            case 'co2':
+                $result = 2000;
+                break;
+            case 'noise':
+                $result = 90;
+                break;
+            case 'pressure':
+                $result = 1080;
+                break;
+            case 'temperature':
+            case 'temperature_ref':
+            case 'temperature_max':
+            case 'max_temp':
+            case 'temperature_min':
+            case 'min_temp':
+                if (strtolower($module_type)=='namodule1' || strtolower($module_type)=='nacurrent') {
+                    $result = 40;
+                }
+                else {
+                    $result = 25;
+                }
+                break;
+            case 'dew_point':
+                $result = 20;
+                break;
+            case 'frost_point':
+                $result = 0;
+                break;
+            case 'heat_index':
+                $result = 80;
+                break;
+            case 'humidex':
+                $result = 50;
+                break;
+            case 'wind_chill':
+                $result = 10;
+                break;
+            case 'cloud_ceiling':
+                $result = 3000;
+                break;
+            case 'rain':
+            case 'rain_hour_aggregated':
+            case 'sum_rain_1':
+            case 'rain_day_aggregated':
+            case 'sum_rain_24':
+                $result = 10;
+                break;
+            case 'snow':
+                $result = 50;
+                break;
+            case 'windangle':
+            case 'gustangle':
+            case 'windangle_max':
+            case 'max_wind_angle':
+                $result = 360;
+                break;
+            case 'windstrength':
+            case 'guststrength':
+            case 'windstrength_max':
+            case 'max_wind_str':
+            case 'wind_ref':
+                $result = 100;
+                break;
+            default:
+                $result = 100;
         }
         return $result;
     }

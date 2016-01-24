@@ -318,11 +318,12 @@ use Type_Description;
      * @param   boolean     $aggregated The array must contain aggregated data types.
      * @param   boolean     $reduced The array is reduced. i.e. contains only modules and measures.
      * @param   boolean     $computed The array must contain computed data types.
+     * @param   boolean     $mono The array must contain min/max.
      * @return  array   An array containing the available measure lines.
      * @since    1.0.0
      * @access   private
      */
-    private function get_td_measure($sample, $full=false, $aggregated=false, $reduced=false, $computed=false) {
+    private function get_td_measure($sample, $full=false, $aggregated=false, $reduced=false, $computed=false, $mono=false) {
         $result = array();
         $ts = $sample['measure_values']['time_utc'] ;
         switch (strtolower($sample['module_type'])) {
@@ -348,10 +349,14 @@ use Type_Description;
                 if ($netatmo) {
                     $result[] = array($this->get_measurement_type('temperature'), 'temperature', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature', (array_key_exists('Temperature', $sample['measure_values']) ? $sample['measure_values']['Temperature'] : ''))));
                 }
-                if ($full) {
+                if ($full || $mono) {
                     if ($netatmo) {
                         $result[] = array($this->get_measurement_type('temperature_max'), 'temperature_max', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature_max', (array_key_exists('max_temp', $sample['measure_values']) ? $sample['measure_values']['max_temp'] : ''))));
                         $result[] = array($this->get_measurement_type('temperature_min'), 'temperature_min', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature_min', (array_key_exists('min_temp', $sample['measure_values']) ? $sample['measure_values']['min_temp'] : ''))));
+                    }
+                }
+                if ($full) {
+                    if ($netatmo) {
                         $result[] = array($this->get_measurement_type('temperature_trend'), 'temperature_trend', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature_trend', (array_key_exists('temp_trend', $sample['measure_values']) ? $sample['measure_values']['temp_trend'] : ''))));
                     }
                     if (isset($sample['place']) && is_array($sample['place'])) {
@@ -376,9 +381,11 @@ use Type_Description;
                 }
                 $result[] = array($this->get_measurement_type('humidity'), 'humidity', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'humidity', (array_key_exists('Humidity', $sample['measure_values']) ? $sample['measure_values']['Humidity'] : ''))));
                 $result[] = array($this->get_measurement_type('temperature'), 'temperature', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature', (array_key_exists('Temperature', $sample['measure_values']) ? $sample['measure_values']['Temperature'] : ''))));
-                if ($full) {
+                if ($full || $mono) {
                     $result[] = array($this->get_measurement_type('temperature_max'), 'temperature_max', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature_max', (array_key_exists('max_temp', $sample['measure_values']) ? $sample['measure_values']['max_temp'] : ''))));
                     $result[] = array($this->get_measurement_type('temperature_min'), 'temperature_min', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature_min', (array_key_exists('min_temp', $sample['measure_values']) ? $sample['measure_values']['min_temp'] : ''))));
+                }
+                if ($full) {
                     $result[] = array($this->get_measurement_type('temperature_trend'), 'temperature_trend', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature_trend', (array_key_exists('temp_trend', $sample['measure_values']) ? $sample['measure_values']['temp_trend'] : ''))));
                 }
                 break;
@@ -425,9 +432,11 @@ use Type_Description;
                 $result[] = array($this->get_measurement_type('co2'), 'co2', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'co2', (array_key_exists('CO2', $sample['measure_values']) ? $sample['measure_values']['CO2'] : ''))));
                 $result[] = array($this->get_measurement_type('humidity'), 'humidity', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'humidity', (array_key_exists('Humidity', $sample['measure_values']) ? $sample['measure_values']['Humidity'] : ''))));
                 $result[] = array($this->get_measurement_type('temperature'), 'temperature', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature', (array_key_exists('Temperature', $sample['measure_values']) ? $sample['measure_values']['Temperature'] : ''))));
-                if ($full) {
+                if ($full || $mono) {
                     $result[] = array($this->get_measurement_type('temperature_max'), 'temperature_max', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature_max', (array_key_exists('max_temp', $sample['measure_values']) ? $sample['measure_values']['max_temp'] : ''))));
                     $result[] = array($this->get_measurement_type('temperature_min'), 'temperature_min', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature_min', (array_key_exists('min_temp', $sample['measure_values']) ? $sample['measure_values']['min_temp'] : ''))));
+                }
+                if ($full) {
                     $result[] = array($this->get_measurement_type('temperature_trend'), 'temperature_trend', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'temperature_trend', (array_key_exists('temp_trend', $sample['measure_values']) ? $sample['measure_values']['temp_trend'] : ''))));
                 }
                 break;
@@ -506,10 +515,11 @@ use Type_Description;
      * @param   boolean     $aggregated The array must contain aggregated data types.
      * @param   boolean     $reduced The array is reduced. i.e. contains only modules and measures.
      * @param   boolean     $computed The array must contain computed data types.
+     * @param   boolean     $mono The array must contain min/max.
      * @since    1.0.0
      * @access   protected
      */
-    protected function get_js_array($datas, $full=true, $aggregated=false, $reduced=false, $computed=false) {
+    protected function get_js_array($datas, $full=true, $aggregated=false, $reduced=false, $computed=false, $mono=false) {
         $result = array();
         if (count($datas) == 0) {return $result;}
         foreach($datas['devices'] as $device) {
@@ -526,9 +536,9 @@ use Type_Description;
                 $sample['battery_vp'] = 0;
                 $sample['rf_status'] = $device['wifi_status'];
                 $sample['place'] = $device['place'];
-                $t_module[] = array ($sample['module_name'], $sample['device_id'], $this->get_td_measure($sample, $full, $aggregated, $reduced, $computed));
+                $t_module[] = array ($sample['module_name'], $sample['device_id'], $this->get_td_measure($sample, $full, $aggregated, $reduced, $computed, $mono));
             }
-            if (($aggregated  && $netatmo) || $full) {
+            if ((($aggregated || $mono) && $netatmo) || $full) {
                 $sample = array();
                 $sample['device_id'] = $device['_id'];
                 $sample['device_name'] = $device['station_name'];
@@ -540,10 +550,13 @@ use Type_Description;
                 $sample['rf_status'] = $device['wifi_status'];
                 $sample['firmware'] = $device['firmware'];
                 $sample['place'] = $device['place'];
-                $t_module[] = array($device['module_name'], $device['_id'], $this->get_td_measure($sample, $full, $aggregated, $reduced, $computed));
+                $t_module[] = array($device['module_name'], $device['_id'], $this->get_td_measure($sample, $full, $aggregated, $reduced, $computed, $mono));
             }
             foreach($device['modules'] as $module) {
                 if (($module['type'] == 'NAComputed' || $module['type'] == 'NAEphemer') && !$computed) {
+                    continue;
+                }
+                if ($module['type'] == 'NAEphemer' && ($computed && !$full)) {
                     continue;
                 }
                 $sample = array();
@@ -557,7 +570,7 @@ use Type_Description;
                 $sample['rf_status'] = $module['rf_status'];
                 $sample['firmware'] = $module['firmware'];
                 $sample['place'] = $device['place'];
-                $t_module[] = array ($module['module_name'], $module['_id'], $this->get_td_measure($sample, $full, $aggregated, $reduced, $computed));
+                $t_module[] = array ($module['module_name'], $module['_id'], $this->get_td_measure($sample, $full, $aggregated, $reduced, $computed, $mono));
             }
             $result[] = array($device['station_name'], $device['_id'], $t_module);
         }
@@ -659,6 +672,158 @@ use Type_Description;
         $result[] = array('flat-concrete',  __('Flat - Concrete', 'live-weather-station'));
         $result[] = array('flat-silver',  __('Flat - Silver', 'live-weather-station'));
         $result[] = array('flat-clouds',  __('Flat - Clouds', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the size options for the clean gauges.
+     *
+     * @return  array   An array containing the clean gauges size options ready to convert to a JS array.
+     * @since    2.1.0
+     * @access   protected
+     */
+    protected function get_justgage_size_js_array($micro=false) {
+        $result = array();
+        if ($micro) {
+            $result[] = array('micro',  __('Miniature', 'live-weather-station'));
+        }
+        $result[] = array('small',  __('Small', 'live-weather-station'));
+        $result[] = array('medium',  __('Medium', 'live-weather-station'));
+        $result[] = array('large',  __('Large', 'live-weather-station'));
+        $result[] = array('scalable',  __('Scalable', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the color options for the clean gauges.
+     *
+     * @return  array   An array containing the clean gauges colors options ready to convert to a JS array.
+     * @since    2.1.0
+     * @access   protected
+     */
+    protected function get_justgage_color_js_array() {
+        $result = array();
+        $result[] = array('lgt-standard',  __('Standard (for light background)', 'live-weather-station'));
+        $result[] = array('drk-standard',  __('Standard (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-flag',  __('Flag (for light background)', 'live-weather-station'));
+        $result[] = array('drk-flag',  __('Flag (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-pinky',  __('Pinky (for light background)', 'live-weather-station'));
+        $result[] = array('drk-pinky',  __('Pinky (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-aquamarine',  __('Aquamarine (for light background)', 'live-weather-station'));
+        $result[] = array('drk-aquamarine',  __('Aquamarine (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-bw',  __('B&W (for light background)', 'live-weather-station'));
+        $result[] = array('drk-bw',  __('B&W (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-solidred',  __('Solid red (for light background)', 'live-weather-station'));
+        $result[] = array('drk-solidred',  __('Solid red (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-solidorange',  __('Solid orange (for light background)', 'live-weather-station'));
+        $result[] = array('drk-solidorange',  __('Solid orange (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-solidyellow',  __('Solid yellow (for light background)', 'live-weather-station'));
+        $result[] = array('drk-solidyellow',  __('Solid yellow (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-solidgreen',  __('Solid green (for light background)', 'live-weather-station'));
+        $result[] = array('drk-solidgreen',  __('Solid green (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-solidblue',  __('Solid blue (for light background)', 'live-weather-station'));
+        $result[] = array('drk-solidblue',  __('Solid blue (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-solidpurple',  __('Solid purple (for light background)', 'live-weather-station'));
+        $result[] = array('drk-solidpurple',  __('Solid purple (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-solidblack',  __('Solid black (for light background)', 'live-weather-station'));
+        $result[] = array('drk-solidblack',  __('Solid black (for dark background)', 'live-weather-station'));
+        $result[] = array('lgt-transparent',  __('Transparent (for light background)', 'live-weather-station'));
+        $result[] = array('drk-transparent',  __('Transparent (for dark background)', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the pointer options for the clean gauges.
+     *
+     * @return  array   An array containing the clean gauges pointers options ready to convert to a JS array.
+     * @since    2.1.0
+     * @access   protected
+     */
+    protected function get_justgage_pointer_js_array() {
+        $result = array();
+        $result[] = array('none',  __('None', 'live-weather-station'));
+        $result[] = array('external',  __('External', 'live-weather-station'));
+        $result[] = array('internal',  __('Internal', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the designs options for the clean gauges.
+     *
+     * @return  array   An array containing the clean gauges designs options ready to convert to a JS array.
+     * @since    2.1.0
+     * @access   protected
+     */
+    protected function get_justgage_design_js_array() {
+        $result = array();
+        $result[] = array('half-flat-thin',  __('Half - Flat - Thin', 'live-weather-station'));
+        $result[] = array('half-flat-standard',  __('Half - Flat - Standard', 'live-weather-station'));
+        $result[] = array('half-flat-fat',  __('Half - Flat - Fat', 'live-weather-station'));
+        $result[] = array('half-flat-pie',  __('Half - Flat - Pie', 'live-weather-station'));
+        $result[] = array('half-3d-thin',  __('Half - 3D - Thin', 'live-weather-station'));
+        $result[] = array('half-3d-standard',  __('Half - 3D - Standard', 'live-weather-station'));
+        $result[] = array('half-3d-fat',  __('Half - 3D - Fat', 'live-weather-station'));
+        $result[] = array('half-3d-pie',  __('Half - 3D - Pie', 'live-weather-station'));
+        $result[] = array('full-flat-thin',  __('Full - Flat - Thin', 'live-weather-station'));
+        $result[] = array('full-flat-standard',  __('Full - Flat - Standard', 'live-weather-station'));
+        $result[] = array('full-flat-fat',  __('Full - Flat - Fat', 'live-weather-station'));
+        $result[] = array('full-flat-pie',  __('Full - Flat - Pie', 'live-weather-station'));
+        $result[] = array('full-3d-thin',  __('Full - 3D - Thin', 'live-weather-station'));
+        $result[] = array('full-3d-standard',  __('Full - 3D - Standard', 'live-weather-station'));
+        $result[] = array('full-3d-fat',  __('Full - 3D - Fat', 'live-weather-station'));
+        $result[] = array('full-3d-pie',  __('Full - 3D - Pie', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the title/label options for the clean gauges.
+     *
+     * @return  array   An array containing the clean gauges titles or labels options ready to convert to a JS array.
+     * @since    2.1.0
+     * @access   protected
+     */
+    protected function get_justgage_title_js_array() {
+        $result = array();
+        $result[] = array('none',  __('None', 'live-weather-station'));
+        $result[] = array('station',  __('Station name', 'live-weather-station'));
+        $result[] = array('module',  __('Module name', 'live-weather-station'));
+        $result[] = array('type',  __('Measurement type', 'live-weather-station'));
+        $result[] = array('unit',  __('Measurement unit', 'live-weather-station'));
+        $result[] = array('station-module',  __('Station name', 'live-weather-station').' - '.__('Module name', 'live-weather-station'));
+        $result[] = array('module-type',  __('Module name', 'live-weather-station').' - '.__('Measurement type', 'live-weather-station'));
+        $result[] = array('type-unit',  __('Measurement type', 'live-weather-station').' ('.__('Measurement unit', 'live-weather-station').')');
+        return $result;
+    }
+
+    /**
+     * Get the unit options for the clean gauges.
+     *
+     * @return  array   An array containing the clean gauges titles options ready to convert to a JS array.
+     * @since    2.1.0
+     * @access   protected
+     */
+    protected function get_justgage_unit_js_array() {
+        $result = array();
+        $result[] = array('none',  __('None', 'live-weather-station'));
+        $result[] = array('unit',  __('Measurement unit', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the background color preview for the clean gauges.
+     *
+     * @return  array   An array containing the clean gauges background colors preview ready to convert to a JS array.
+     * @since    2.1.0
+     * @access   protected
+     */
+    protected function get_justgage_background_js_array() {
+        $result = array();
+        $result[] = array('transparent',  __('Test with actual background', 'live-weather-station'));
+        $result[] = array('#FFFFFF',  __('Test with white background', 'live-weather-station'));
+        $result[] = array('#DDDDDD',  __('Test with light background', 'live-weather-station'));
+        $result[] = array('#AAAAAA',  __('Test with medium background', 'live-weather-station'));
+        $result[] = array('#555555',  __('Test with dark background', 'live-weather-station'));
+        $result[] = array('#000000',  __('Test with black background', 'live-weather-station'));
         return $result;
     }
 

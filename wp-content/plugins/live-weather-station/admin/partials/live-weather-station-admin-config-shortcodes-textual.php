@@ -139,7 +139,7 @@
                     </div>
                     <div id="major-publishing-actions">
                         <div id="delete-action">
-                            <?php esc_html_e('This shortcode is ready to insert (in article or page) without modification.', 'live-weather-station' );?>
+                            <?php esc_html_e('This shortcode is ready for use.', 'live-weather-station' );?>
                         </div>
                         <div id="publishing-action">
                             <button data-clipboard-target="#textual-datas-shortcode-<?php echo $device_key; ?>" class="button button-primary textual-cpy-<?php echo $device_key; ?>"><?php esc_attr_e('Copy', 'live-weather-station');?></button>

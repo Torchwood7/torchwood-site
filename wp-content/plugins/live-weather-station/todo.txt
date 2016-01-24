@@ -15,7 +15,6 @@
 
  * 2.x - Icons dashboard
  * 2.x - Steel series gauges
- * 2.x - Flat dashboard with responsive gauges
  * 4.x - Widget with changing background
 
 

@@ -73,6 +73,7 @@ class Live_Weather_Station_Widget_Outdoor extends WP_Widget {
                 'txt_color' => '#ffffff',
                 'show_tooltip' => false,
                 'show_borders' => false,
+                'hide_obsolete' => false,
                 'show_current' => false,
                 'show_temperature' => false,
                 'show_pressure' => false,
@@ -91,6 +92,7 @@ class Live_Weather_Station_Widget_Outdoor extends WP_Widget {
                 'flat_design' => false));
         $result['show_tooltip'] = !empty($result['show_tooltip']) ? 1 : 0;
         $result['show_borders'] = !empty($result['show_borders']) ? 1 : 0;
+        $result['hide_obsolete'] = !empty($result['hide_obsolete']) ? 1 : 0;
         $result['show_current'] = !empty($result['show_current']) ? 1 : 0;
         $result['show_temperature'] = !empty($result['show_temperature']) ? 1 : 0;
         $result['show_pressure'] = !empty($result['show_pressure']) ? 1 : 0;
@@ -130,6 +132,7 @@ class Live_Weather_Station_Widget_Outdoor extends WP_Widget {
         $show_tooltip = (bool)$instance['show_tooltip'];
         $show_borders = (bool)$instance['show_borders'];
         $show_current = (bool)$instance['show_current'];
+        $hide_obsolete = (bool)$instance['hide_obsolete'];
         $show_temperature = (bool)$instance['show_temperature'] ;
         $show_pressure = (bool)$instance['show_pressure'] ;
         $show_humidity = (bool)$instance['show_humidity'] ;
@@ -247,6 +250,7 @@ class Live_Weather_Station_Widget_Outdoor extends WP_Widget {
         $instance['txt_color'] = $new_instance['txt_color'];
         $instance['show_tooltip'] = !empty($new_instance['show_tooltip']) ? 1 : 0;
         $instance['show_borders'] = !empty($new_instance['show_borders']) ? 1 : 0;
+        $instance['hide_obsolete'] = !empty($new_instance['hide_obsolete']) ? 1 : 0;
         $instance['show_current'] = !empty($new_instance['show_current']) ? 1 : 0;
         $instance['show_temperature'] = !empty($new_instance['show_temperature']) ? 1 : 0;
         $instance['show_pressure'] = !empty($new_instance['show_pressure']) ? 1 : 0;
@@ -282,6 +286,7 @@ class Live_Weather_Station_Widget_Outdoor extends WP_Widget {
         $show_tooltip = (bool)$instance['show_tooltip'];
         $show_borders =  (bool)$instance['show_borders'];
         $show_current = (bool)$instance['show_current'];
+        $hide_obsolete = (bool)$instance['hide_obsolete'];
         $show_temperature = (bool)$instance['show_temperature'] ;
         $show_pressure = (bool)$instance['show_pressure'] ;
         $show_humidity = (bool)$instance['show_humidity'] ;
@@ -493,68 +498,84 @@ class Live_Weather_Station_Widget_Outdoor extends WP_Widget {
         }
         $has_current = (count($current) > 0);
         if (!$NAMain && $has_current && get_option('live_weather_station_owm_account')[1] != 1) {
-            $NAMain = true;
-            if (array_key_exists('pressure', $current['datas'])){
-                $datas['pressure'] = array();
-                $datas['pressure']['value'] = $current['datas']['pressure']['value'];
-                $datas['pressure']['unit'] = $current['datas']['pressure']['unit']['unit'];
-                $show_pressure = (bool)$instance['show_pressure'] ;
-            }
-            else {
+            if ($hide_obsolete && get_option('live_weather_station_owm_account')[1] == 0) {
                 $show_pressure = false ;
             }
-            if (array_key_exists('loc_latitude', $current['datas']) && array_key_exists('loc_longitude', $current['datas']) && array_key_exists('loc_altitude', $current['datas'])) {
-                $location = $this->output_coordinate($current['datas']['loc_latitude']['value'], 'loc_latitude', 6) . ' / ' .
-                    $this->output_coordinate($current['datas']['loc_longitude']['value'], 'loc_longitude', 6) . ' (' .
-                    $this->output_value($current['datas']['loc_altitude']['value'], 'loc_altitude', true) . ')';
+            else {
+                $NAMain = true;
+                if (array_key_exists('pressure', $current['datas'])) {
+                    $datas['pressure'] = array();
+                    $datas['pressure']['value'] = $current['datas']['pressure']['value'];
+                    $datas['pressure']['unit'] = $current['datas']['pressure']['unit']['unit'];
+                    $show_pressure = (bool)$instance['show_pressure'];
+                } else {
+                    $show_pressure = false;
+                }
+                if (array_key_exists('loc_latitude', $current['datas']) && array_key_exists('loc_longitude', $current['datas']) && array_key_exists('loc_altitude', $current['datas'])) {
+                    $location = $this->output_coordinate($current['datas']['loc_latitude']['value'], 'loc_latitude', 6) . ' / ' .
+                        $this->output_coordinate($current['datas']['loc_longitude']['value'], 'loc_longitude', 6) . ' (' .
+                        $this->output_value($current['datas']['loc_altitude']['value'], 'loc_altitude', true) . ')';
+                }
             }
         }
         if (!$NAModule1 && $has_current && get_option('live_weather_station_owm_account')[1] != 1) {
-            $NAModule1 = true;
-            if (array_key_exists('humidity', $current['datas'])) {
-                $datas['humidity'] = array();
-                $datas['humidity']['value'] = $current['datas']['humidity']['value'];
-                $datas['humidity']['unit'] = $current['datas']['humidity']['unit']['unit'];
-                $show_humidity = (bool)$instance['show_humidity'] ;
-            }
-            else {
-                $show_humidity = false;
-            }
-            if (array_key_exists('temperature', $current['datas'])) {
-                $datas['temperature'] = array();
-                $datas['temperature']['value'] = $current['datas']['temperature']['value'];
-                $datas['temperature']['unit'] = $current['datas']['temperature']['unit']['unit'];
-                $show_temperature = (bool)$instance['show_temperature'] ;
-            }
-            else {
+            if ($hide_obsolete && get_option('live_weather_station_owm_account')[1] == 0) {
+                $show_humidity = false ;
                 $show_temperature = false;
+            }
+            else {
+                $NAModule1 = true;
+                if (array_key_exists('humidity', $current['datas'])) {
+                    $datas['humidity'] = array();
+                    $datas['humidity']['value'] = $current['datas']['humidity']['value'];
+                    $datas['humidity']['unit'] = $current['datas']['humidity']['unit']['unit'];
+                    $show_humidity = (bool)$instance['show_humidity'];
+                } else {
+                    $show_humidity = false;
+                }
+                if (array_key_exists('temperature', $current['datas'])) {
+                    $datas['temperature'] = array();
+                    $datas['temperature']['value'] = $current['datas']['temperature']['value'];
+                    $datas['temperature']['unit'] = $current['datas']['temperature']['unit']['unit'];
+                    $show_temperature = (bool)$instance['show_temperature'];
+                } else {
+                    $show_temperature = false;
+                }
             }
         }
         if (!$NAModule2 && $has_current && get_option('live_weather_station_owm_account')[1] != 1) {
-            $NAModule2 = true;
-            if (array_key_exists('windangle', $current['datas']) && array_key_exists('windstrength', $current['datas'])) {
-                $datas['windangle'] = array();
-                $datas['windangle']['value'] = $current['datas']['windangle']['value'];
-                $datas['windangle']['from'] = $this->get_angle_full_text($current['datas']['windangle']['value']);
-                $datas['windstrength'] = array();
-                $datas['windstrength']['value'] = $current['datas']['windstrength']['value'];
-                $datas['windstrength']['unit'] = $current['datas']['windstrength']['unit']['unit'];
-                $show_wind = (bool)$instance['show_wind'] ;
+            if ($hide_obsolete && get_option('live_weather_station_owm_account')[1] == 0) {
+                $show_wind = false;
             }
             else {
-                $show_wind = false;
+                $NAModule2 = true;
+                if (array_key_exists('windangle', $current['datas']) && array_key_exists('windstrength', $current['datas'])) {
+                    $datas['windangle'] = array();
+                    $datas['windangle']['value'] = $current['datas']['windangle']['value'];
+                    $datas['windangle']['from'] = $this->get_angle_full_text($current['datas']['windangle']['value']);
+                    $datas['windstrength'] = array();
+                    $datas['windstrength']['value'] = $current['datas']['windstrength']['value'];
+                    $datas['windstrength']['unit'] = $current['datas']['windstrength']['unit']['unit'];
+                    $show_wind = (bool)$instance['show_wind'];
+                } else {
+                    $show_wind = false;
+                }
             }
         }
         if (!$NAModule3 && $has_current && get_option('live_weather_station_owm_account')[1] != 1) {
-            $NAModule3 = true;
-            if (array_key_exists('rain', $current['datas'])) {
-                $datas['rain'] = array();
-                $datas['rain']['value'] = $current['datas']['rain']['value'];
-                $datas['rain']['unit'] = $current['datas']['rain']['unit']['unit'];
-                $show_rain = (bool)$instance['show_rain'] ;
+            if ($hide_obsolete && get_option('live_weather_station_owm_account')[1] == 0) {
+                $show_rain = false;
             }
             else {
-                $show_rain = false;
+                $NAModule3 = true;
+                if (array_key_exists('rain', $current['datas'])) {
+                    $datas['rain'] = array();
+                    $datas['rain']['value'] = $current['datas']['rain']['value'];
+                    $datas['rain']['unit'] = $current['datas']['rain']['unit']['unit'];
+                    $show_rain = (bool)$instance['show_rain'];
+                } else {
+                    $show_rain = false;
+                }
             }
         }
         if (!$NAMain) {
@@ -589,6 +610,9 @@ class Live_Weather_Station_Widget_Outdoor extends WP_Widget {
         }
         else {
             //
+        }
+        if ($show_current) {
+            $show_current = ($datas['weather']['value'] != 0);
         }
         echo $args['before_widget'];
         $id = uniqid();

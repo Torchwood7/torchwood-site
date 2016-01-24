@@ -32,9 +32,11 @@
                                         echo ' / ' . __('Last seen on', 'live-weather-station') . ' ' . $this->get_date_from_utc($device['dashboard_data']['time_utc'], $tz) . ' ' . __('at', 'live-weather-station') . ' ' . $this->get_time_from_utc($device['dashboard_data']['time_utc'], $tz);
                                         echo '<br/>';
                                         foreach ($device['data_type'] as $key => $data_type) {
-                                            echo $this->get_measurement_type($data_type);
-                                            echo ' (' . $this->output_value($device['dashboard_data'][$data_type], $data_type, true, false, '', $tz) . ')';
-                                            echo($key < (sizeof($device['data_type']) - 1) ? ', ' : '');
+                                            if (isset($device['dashboard_data'][$data_type])) {
+                                                echo $this->get_measurement_type($data_type);
+                                                echo ' (' . $this->output_value($device['dashboard_data'][$data_type], $data_type, true, false, '', $tz) . ')';
+                                                echo($key < (sizeof($device['data_type']) - 1) ? ', ' : '');
+                                            }
                                         }
                                 ?>
                                 <br/><br/>
@@ -55,9 +57,11 @@
                                         echo __('Battery level', 'live-weather-station').' '.strtolower($this->get_battery_level_text($module['battery_vp'], $module['type'])) . ' / ' . __('Radio signal', 'live-weather-station').' '.strtolower($this->get_rf_level_text($module['rf_status']));
                                         echo '<br/>';
                                         foreach($module_data_types as $key => $data_type) {
-                                            echo $this->get_measurement_type($data_type);
-                                            echo ' ('.$this->output_value($module['dashboard_data'][$data_type],$data_type, true, false, '', $tz).')';
-                                            echo ($key < (sizeof($module_data_types)-1) ? ', ' : '');
+                                            if (isset($module['dashboard_data'][$data_type])) {
+                                                echo $this->get_measurement_type($data_type);
+                                                echo ' (' . $this->output_value($module['dashboard_data'][$data_type], $data_type, true, false, '', $tz) . ')';
+                                                echo($key < (sizeof($module_data_types) - 1) ? ', ' : '');
+                                            }
                                         }
                                     ?>
                                     <br/><br/>
@@ -74,9 +78,11 @@
                             <span>
                                 <?php
                                 foreach($module_data_types as $key => $data_type) {
-                                    echo $this->get_measurement_type($data_type);
-                                    echo ' ('.$this->output_value($module['dashboard_data'][$data_type],$data_type, true, false, '', $tz).')';
-                                    echo ($key < (sizeof($module_data_types)-1) ? ', ' : '');
+                                    if (isset($module['dashboard_data'][$data_type])) {
+                                        echo $this->get_measurement_type($data_type);
+                                        echo ' (' . $this->output_value($module['dashboard_data'][$data_type], $data_type, true, false, '', $tz) . ')';
+                                        echo($key < (sizeof($module_data_types) - 1) ? ', ' : '');
+                                    }
                                 }
                                 ?>
                                 <br/><br/>
@@ -92,9 +98,11 @@
                             <span>
                                 <?php
                                 foreach($module_data_types as $key => $data_type) {
-                                    echo $this->get_measurement_type($data_type);
-                                    echo ' ('.$this->output_value($module['dashboard_data'][$data_type],$data_type, true, false, '', $tz).')';
-                                    echo ($key < (sizeof($module_data_types)-1) ? ', ' : '');
+                                    if (isset($module['dashboard_data'][$data_type])) {
+                                        echo $this->get_measurement_type($data_type);
+                                        echo ' (' . $this->output_value($module['dashboard_data'][$data_type], $data_type, true, false, '', $tz) . ')';
+                                        echo($key < (sizeof($module_data_types) - 1) ? ', ' : '');
+                                    }
                                 }
                                 ?>
                                 <br/><br/>
@@ -110,9 +118,11 @@
                             <span>
                                 <?php
                                 foreach($module_data_types as $key => $data_type) {
-                                    echo $this->get_measurement_type($data_type);
-                                    echo ' ('.$this->output_value($module['dashboard_data'][$data_type],$data_type, true, false, '', $tz).')';
-                                    echo ($key < (sizeof($module_data_types)-1) ? ', ' : '');
+                                    if (isset($module['dashboard_data'][$data_type])) {
+                                        echo $this->get_measurement_type($data_type);
+                                        echo ' (' . $this->output_value($module['dashboard_data'][$data_type], $data_type, true, false, '', $tz) . ')';
+                                        echo($key < (sizeof($module_data_types) - 1) ? ', ' : '');
+                                    }
                                 }
                                 ?>
                                 <br/><br/>
@@ -127,9 +137,10 @@
             <div id="major-publishing-actions">
                 <?php include(LWS_ADMIN_DIR.'partials/live-weather-station-admin-config-shortcodes-textual.php'); ?>
                 <?php include(LWS_ADMIN_DIR.'partials/live-weather-station-admin-config-shortcodes-lcd.php'); ?>
+                <?php include(LWS_ADMIN_DIR.'partials/live-weather-station-admin-config-shortcodes-justgage.php'); ?>
                 <div>
                     <?php esc_html_e('Get shortcodes for ', 'live-weather-station'); ?>
-                    <a href="#" id="textual-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('textual datas', 'live-weather-station'); ?></a> | <a href="#" id="lcd-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('LCD display', 'live-weather-station'); ?></a>
+                    <a href="#" id="textual-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('textual datas', 'live-weather-station'); ?></a> | <a href="#" id="lcd-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('LCD display', 'live-weather-station'); ?></a> | <a href="#" id="justgage-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('clean gauge', 'live-weather-station'); ?></a>
                 </div>
                 <div class="clear"></div>
             </div>

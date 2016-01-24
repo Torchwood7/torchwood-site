@@ -53,6 +53,19 @@
                             </span>
                         </td>
                     </tr>
+                    <tr>
+                        <th class="lws-option" width="35%" align="left" scope="row"><?php esc_html_e('Gauges boundaries', 'live-weather-station');?></th>
+                        <td width="2%"/>
+                        <td align="left">
+                            <span class="select-option">
+                                <select class="option-at-100" name="minmax">
+                                    <?php foreach ($minmax as $key => $val) { ?>
+                                        <option value="<?php echo $key ?>"<?php if (get_option('live_weather_station_settings')[7]==$key):?> selected="selected"<?php endif;?>><?php echo $val ?></option>;
+                                    <?php } ?>
+                                </select>
+                            </span>
+                        </td>
+                    </tr>
                     <?php /*
                     </tbody>
                 </table>

@@ -136,11 +136,11 @@
                         $("#lcd-datas-size-<?php echo $device_key; ?>").change(function() {
                             if ($("#lcd-datas-size-<?php echo $device_key; ?>").val()=='scalable') { 
                                 c<?php echo $fingerprint; ?>.setSize('small', false);
-                                $("#info-<?php echo $device_key; ?>").show();
+                                $("#lcd-info-<?php echo $device_key; ?>").show();
                             }
                             else {
                                 c<?php echo $fingerprint; ?>.setSize($("#lcd-datas-size-<?php echo $device_key; ?>").val(), false);
-                                $("#info-<?php echo $device_key; ?>").hide();
+                                $("#lcd-info-<?php echo $device_key; ?>").hide();
                             }
                             $("#lcd-datas-speed-<?php echo $device_key; ?>" ).change();
                         });
@@ -167,7 +167,7 @@
                     <div class="inside" style="text-align: center;">
                         <div id="<?php echo $fingerprint; ?>" style="padding:0px;"></div>
                     </div>
-                    <span id="info-<?php echo $device_key; ?>" style="display: none;">
+                    <span id="lcd-info-<?php echo $device_key; ?>" style="display: none;">
                         <div id="major-publishing-actions">
                             <?php esc_html_e('This controls will be dynamically resized to fit its parent\'s size.', 'live-weather-station' );?>
                         </div>
@@ -182,7 +182,7 @@
                     </div>
                     <div id="major-publishing-actions">
                         <div id="delete-action">
-                            <?php esc_html_e('This shortcode is ready to insert (in article or page) without modification.', 'live-weather-station' );?>
+                            <?php esc_html_e('This shortcode is ready for use.', 'live-weather-station' );?>
                         </div>
                         <div id="publishing-action">
                             <button data-clipboard-target="#lcd-datas-shortcode-<?php echo $device_key; ?>" class="button button-primary lcd-cpy-<?php echo $device_key; ?>"><?php esc_attr_e('Copy', 'live-weather-station');?></button>

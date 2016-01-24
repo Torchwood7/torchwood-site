@@ -355,16 +355,13 @@ trait Datas_Query {
     }
 
     /**
-     * Get specific data.
+     * Get sub attributes for some measure types.
      *
      * @param   array   $attributes  An array representing the query.
-     * @param   boolean     $obsolescence_filtering     Don't return obsolete data.
-     * @return array An array containing all the datas.
-     * @since    1.0.0
-     * @access   protected
+     * @return array An array containing all the sub attributes + the attributes.
+     * @since    2.1.0
      */
-    protected function get_specific_datas($attributes, $obsolescence_filtering=false) {
-        global $wpdb;
+    private function get_sub_attributes($attributes) {
         $sub_attributes = array();
         switch ($attributes['measure_type']) {
             case 'dew_point':
@@ -391,9 +388,73 @@ trait Datas_Query {
                 $sub_attributes[] = 'wind_chill';
                 $sub_attributes[] = 'temperature_ref';
                 break;
+            case 'temperature':
+                $sub_attributes[] = 'temperature';
+                $sub_attributes[] = 'temperature_min';
+                $sub_attributes[] = 'temperature_max';
+                break;
+            case 'sos': // Helper to found names (station and module) in case there's no data form first round
+                $sub_attributes[] = 'temperature';
+                $sub_attributes[] = 'humidity';
+                $sub_attributes[] = 'pressure';
+                $sub_attributes[] = 'rain';
+                $sub_attributes[] = 'snow';
+                $sub_attributes[] = 'cloudiness';
+                break;
             default:
                 $sub_attributes[] = $attributes['measure_type'];
         }
+        return $sub_attributes;
+    }
+
+    /**
+     * Get specific lines.
+     *
+     * @param   array   $attributes  An array representing the query.
+     * @param   boolean     $obsolescence_filtering     Don't return obsolete data.
+     * @return array An array containing all the datas.
+     * @since    2.1.0
+     * @access   protected
+     */
+    protected function get_line_datas($attributes, $obsolescence_filtering=false) {
+        global $wpdb;
+        $sub_attributes = $this->get_sub_attributes($attributes);
+        $measures = "";
+        if (count($sub_attributes)>0) {
+            $i = 0;
+            foreach ($sub_attributes as $att) {
+                $measures = $measures . ($i!=0?" OR ":"")."measure_type='" . $att . "'";
+                $i++;
+            }
+        }
+        $table_name = $wpdb->prefix . self::live_weather_station_datas_table();
+        $sql = "SELECT * FROM " . $table_name . " WHERE device_id='" . $attributes['device_id'] . "' AND module_id='" . $attributes['module_id'] . "' AND (" . $measures . ")";
+        try {
+            $query = (array)$wpdb->get_results($sql);
+            $query_a = (array)$query;
+            $result = array();
+            foreach ($query_a as $val) {
+                $result[] = (array)$val;
+            }
+            return ($obsolescence_filtering? $this->obsolescence_filtering($result) : $result);
+        }
+        catch(Exception $ex) {
+            return array();
+        }
+    }
+
+    /**
+     * Get specific data.
+     *
+     * @param   array   $attributes  An array representing the query.
+     * @param   boolean     $obsolescence_filtering     Don't return obsolete data.
+     * @return array An array containing all the datas.
+     * @since    1.0.0
+     * @access   protected
+     */
+    protected function get_specific_datas($attributes, $obsolescence_filtering=false) {
+        global $wpdb;
+        $sub_attributes = $this->get_sub_attributes($attributes);
         $measures = "";
         if (count($sub_attributes)>0) {
             $i = 0;
@@ -416,6 +477,7 @@ trait Datas_Query {
                 }
                 $i++;
             }
+            //ToDo: correct obsolescence filtering for this type of array
             return ($obsolescence_filtering ? $this->obsolescence_filtering($result) : $result);
         }
         catch (Exception $ex) {

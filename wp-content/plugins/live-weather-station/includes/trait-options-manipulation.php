@@ -14,7 +14,7 @@ trait Options_Manipulation {
     private static $live_weather_station_version = '-' ;
     private static $live_weather_station_netatmo_account = array('', '',false) ;
     private static $live_weather_station_owm_account = array('', 0) ;
-    private static $live_weather_station_settings = array(0, 0, 0, 0, 0, 0, 0) ;
+    private static $live_weather_station_settings = array(0, 0, 0, 0, 0, 0, 0, 0) ;
 
     /**
      * Drop options of the plugin.
@@ -34,7 +34,6 @@ trait Options_Manipulation {
      * Init options of the plugin.
      *
      * @since    1.0.0
-     * @access   protected
      * @static
      */
     protected static function init_options() {

@@ -483,4 +483,17 @@ trait Unit_Description {
         $result[6] = __( 'After 24 hours' , 'live-weather-station');
         return $result;
     }
+
+    /**
+     * Get bounds values for gauges values.
+     *
+     * @return  array   An array containing the available bounds values.
+     * @since    2.1.0
+     */
+    protected function get_minmax_array() {
+        $result = array();
+        $result[0] = __( 'Fixed min & max' , 'live-weather-station');
+        $result[1] = __( 'Adapted min & max when possible' , 'live-weather-station');
+        return $result;
+    }
 }

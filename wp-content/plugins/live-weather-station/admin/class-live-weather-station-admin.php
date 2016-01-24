@@ -74,6 +74,8 @@ class Live_Weather_Station_Admin {
         wp_enqueue_script( $this->Live_Weather_Station, LWS_ADMIN_URL.'js/live-weather-station-admin.min.js', array( 'jquery', 'postbox' ), $this->version, false );
         wp_enqueue_script( 'clipboard.js', LWS_ADMIN_URL.'js/clipboard.min.js', array('jquery'), $this->version, false );
         wp_enqueue_script( 'lws-lcd.js', LWS_PUBLIC_URL.'js/lws-lcd.min.js', array('jquery'), $this->version, false );
+        wp_enqueue_script( 'raphael.js', LWS_PUBLIC_URL.'js/raphael.min.js', array('jquery'), $this->version, false );
+        wp_enqueue_script( 'justgage.js', LWS_PUBLIC_URL.'js/justgage.min.js', array('raphael.js'), $this->version, false );
         wp_enqueue_script( 'thickbox' );
 	}
 
@@ -347,11 +349,12 @@ class Live_Weather_Station_Admin {
                 $viewing_options = $this->get_viewing_options_array();
                 $mode_options = $this->get_mode_options_array();
                 $obsolescence = $this->get_obsolescence_array();
+                $minmax = $this->get_minmax_array();
                 $netatmo = new Netatmo_Collector();
                 $owm = new Owm_Collector();
                 $weather = new Weather_Computer();
                 $ephemeris = new Ephemeris_Computer();
-                $datas = $this->merge_data($netatmo->get_datas(), $owm->get_datas(), $weather->compute(), $ephemeris->compute());
+                $datas = $this->merge_data($netatmo->get_datas(true), $owm->get_datas(), $weather->compute(), $ephemeris->compute());
                 if ($this->netatmo_error == '') {
                     $error = $netatmo->last_netatmo_error;
                 }
@@ -369,14 +372,27 @@ class Live_Weather_Station_Admin {
                 if (count($datas) > 0) {
                     $js_array_textual = $this->get_js_array($datas, true, false, false, true);
                     $js_array_lcd = $this->get_js_array($datas, false, true, true);
+                    $js_array_justgage = $this->get_js_array($datas, false, false, false, true, true);
                 }
                 $js_array_lcd_design = $this->get_lcd_design_js_array();
                 $js_array_lcd_size = $this->get_lcd_size_js_array();
                 $js_array_lcd_speed = $this->get_lcd_speed_js_array();
+
+                $js_array_justgage_design = $this->get_justgage_design_js_array();
+                $js_array_justgage_size = $this->get_justgage_size_js_array(true);
+                $js_array_justgage_color = $this->get_justgage_color_js_array();
+                $js_array_justgage_pointer = $this->get_justgage_pointer_js_array();
+                $js_array_justgage_title = $this->get_justgage_title_js_array();
+                $js_array_justgage_unit = $this->get_justgage_unit_js_array();
+                $js_array_justgage_background = $this->get_justgage_background_js_array();
+
                 $status = $this->get_status($oerror != '');
                 $args = compact( 'error', 'warning', 'oerror', 'owarning', 'status', 'temperature', 'pressure', 'wind',
-                    'altitude', 'distance', 'mode_options', 'viewing_options', 'obsolescence', 'datas', 'js_array_textual',
-                    'js_array_lcd', 'js_array_lcd_design', 'js_array_lcd_size', 'js_array_lcd_speed');
+                    'altitude', 'distance', 'mode_options', 'viewing_options', 'obsolescence', 'minmax', 'datas',
+                    'js_array_textual', 'js_array_lcd', 'js_array_lcd_design', 'js_array_lcd_size', 'js_array_lcd_speed',
+                    'js_array_justgage', 'js_array_justgage_design', 'js_array_justgage_size', 'js_array_justgage_color',
+                    'js_array_justgage_pointer', 'js_array_justgage_title', 'js_array_justgage_unit',
+                    'js_array_justgage_background');
                 break;
             case 'add-edit-owm':
                 if (count($station) == 0) {
@@ -421,10 +437,13 @@ class Live_Weather_Station_Admin {
             array_key_exists('pressure-unit', $_POST) &&
             array_key_exists('viewing-options', $_POST) &&
             array_key_exists('obsolescence', $_POST) &&
+            array_key_exists('minmax', $_POST) &&
             array_key_exists('wind-unit', $_POST) &&
             array_key_exists('altitude-unit', $_POST) &&
             array_key_exists('distance-unit', $_POST)) {
-            $array_options = array($_POST['temperature-unit'], $_POST['pressure-unit'], $_POST['wind-unit'], $_POST['viewing-options'], $_POST['altitude-unit'], $_POST['distance-unit'], $_POST['obsolescence']);
+            $array_options = array((integer)$_POST['temperature-unit'], (integer) $_POST['pressure-unit'], (integer) $_POST['wind-unit'],
+                                    (integer) $_POST['viewing-options'], (integer) $_POST['altitude-unit'], (integer) $_POST['distance-unit'],
+                                    (integer) $_POST['obsolescence'], (integer) $_POST['minmax']);
             update_option('live_weather_station_settings', $array_options);
         }
         if (array_key_exists('login', $_POST) && array_key_exists('password', $_POST)) {

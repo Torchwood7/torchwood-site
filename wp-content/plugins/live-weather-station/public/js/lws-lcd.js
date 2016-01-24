@@ -60,7 +60,7 @@ var lws_lcd = (function() {
     var animated                = param.animated === undefined ? true : param.animated;
     var duration                = clamp(0, 10, param.duration) || 0.4;
     var cycleSpeed              = param.cycleSpeed || 2000;
-    var refreshSpeed            = param.refreshSpeed || 300000;
+    var refreshSpeed            = param.refreshSpeed || 120000;
     var autoRefresh             = param.autoRefresh === undefined ? true : param.autoRefresh;
     var qDevice                 = param.qDevice || '';
     var qModule                 = param.qModule || '*';
