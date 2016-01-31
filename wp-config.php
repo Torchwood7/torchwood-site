@@ -25,10 +25,10 @@ define( 'WPCACHEHOME', '/home/admin/web/torchwood.ml/public_html/wp-content/plug
 define('DB_NAME', 'admin_wordpress');
 
 /** Имя пользователя MySQL */
-define('DB_USER', 'admin_wordpress');
+define('DB_USER', '');
 
 /** Пароль к базе данных MySQL */
-define('DB_PASSWORD', 'qXUnwk26hV');
+define('DB_PASSWORD', '');
 
 /** Имя сервера MySQL */
 define('DB_HOST', 'localhost');
