@@ -138,9 +138,10 @@
                 <?php include(LWS_ADMIN_DIR.'partials/live-weather-station-admin-config-shortcodes-textual.php'); ?>
                 <?php include(LWS_ADMIN_DIR.'partials/live-weather-station-admin-config-shortcodes-lcd.php'); ?>
                 <?php include(LWS_ADMIN_DIR.'partials/live-weather-station-admin-config-shortcodes-justgage.php'); ?>
+                <?php include(LWS_ADMIN_DIR.'partials/live-weather-station-admin-config-shortcodes-steelmeter.php'); ?>
                 <div>
                     <?php esc_html_e('Get shortcodes for ', 'live-weather-station'); ?>
-                    <a href="#" id="textual-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('textual datas', 'live-weather-station'); ?></a> | <a href="#" id="lcd-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('LCD display', 'live-weather-station'); ?></a> | <a href="#" id="justgage-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('clean gauge', 'live-weather-station'); ?></a>
+                    <a href="#" id="textual-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('textual datas', 'live-weather-station'); ?></a> | <a href="#" id="lcd-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('LCD display', 'live-weather-station'); ?></a> | <a href="#" id="justgage-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('clean gauge', 'live-weather-station'); ?></a> | <a href="#" id="steelmeter-datas-link-<?php echo $device_key; ?>"><?php esc_html_e('steel meter', 'live-weather-station'); ?></a>
                 </div>
                 <div class="clear"></div>
             </div>

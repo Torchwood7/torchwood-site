@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Live Weather Station for Netatmo\n"
-"POT-Creation-Date: 2016-01-12 21:32+0100\n"
-"PO-Revision-Date: 2016-01-12 22:16+0100\n"
+"POT-Creation-Date: 2016-01-25 17:30+0100\n"
+"PO-Revision-Date: 2016-01-25 17:33+0100\n"
 "Last-Translator: Pierre Lannoy <pierre@lannoy.fr>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: admin/class-live-weather-station-admin.php:99
+#: admin/class-live-weather-station-admin.php:101
 #: admin/partials/live-weather-station-admin-config-accounts-settings.php:13
 msgid "Settings"
 msgstr "Réglages"
@@ -63,8 +63,8 @@ msgstr "Certains champs obligatoires sont manquant !"
 
 #: admin/partials/live-weather-station-admin-add-edit-owm.php:30
 #: includes/trait-javascript-array.php:259
-#: includes/trait-javascript-array.php:788
-#: includes/trait-javascript-array.php:792
+#: includes/trait-javascript-array.php:781
+#: includes/trait-javascript-array.php:786
 msgid "Station name"
 msgstr "Nom de la station"
 
@@ -86,7 +86,7 @@ msgstr "Pays"
 
 #: admin/partials/live-weather-station-admin-add-edit-owm.php:48
 #: admin/partials/live-weather-station-admin-config-stations.php:28
-#: includes/trait-type-description.php:182
+#: includes/trait-type-description.php:183
 msgid "Time zone"
 msgstr "Fuseau horaire"
 
@@ -118,7 +118,7 @@ msgstr ""
 "ou laisser les champs vides :"
 
 #: admin/partials/live-weather-station-admin-add-edit-owm.php:102
-#: includes/trait-type-description.php:174
+#: includes/trait-type-description.php:175
 msgid "Latitude"
 msgstr "Latitude"
 
@@ -127,7 +127,7 @@ msgid "(eg 49.85)"
 msgstr "(p.e. 49.85)"
 
 #: admin/partials/live-weather-station-admin-add-edit-owm.php:106
-#: includes/trait-type-description.php:178
+#: includes/trait-type-description.php:179
 msgid "Longitude"
 msgstr "Longitude"
 
@@ -144,11 +144,14 @@ msgstr "(p.e. -1.6)"
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:14
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:165
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:178
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:14
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:612
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:625
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:14
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:124
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:135
 #: admin/partials/live-weather-station-admin-config-stations.php:14
-#: admin/partials/live-weather-station-admin-config-stations.php:154
+#: admin/partials/live-weather-station-admin-config-stations.php:155
 #: admin/partials/live-weather-station-admin-config-summary.php:11
 msgid "Click to toggle"
 msgstr "Cliquer pour basculer l’affichage"
@@ -217,17 +220,17 @@ msgstr ""
 msgid ""
 "<em>Live Weather Station</em> is a free and open source plugin for "
 "WordPress. It integrates other free and open source works (as-is or "
-"modified) like Weather Icons project by Erik Flowers, EnzoJS by Gerrit "
-"Grunwald, JustGage by Bojan Đuričić, OpenWeatherMap PHP API by Christian "
-"Flach, phpcolors by Arlo Carreon, moonrise/moonset calculation from Matt "
-"\"dxprog\" Hackmann and moon phase calculation from Samir Shah."
+"modified) like Weather Icons project by Erik Flowers, EnzoJS and SteelSeries "
+"by Gerrit Grunwald, JustGage by Bojan Đuričić, OpenWeatherMap PHP API by "
+"Christian Flach, phpcolors by Arlo Carreon, moonrise/moonset calculation "
+"from Matt \"dxprog\" Hackmann and moon phase calculation from Samir Shah."
 msgstr ""
 "<em>Live Weather Station</em> est un plugin gratuit et open source pour "
 "WordPress. Il incorpore d’autres travaux gratuits et open source tels que le "
-"projet Weather Icons de Erik Flowers, EnzoJS de Gerrit Grunwald, JustGage de "
-"Bojan Đuričić, OpenWeatherMap PHP API de Christian Flach, phpcolors de Arlo "
-"Carreon, les calculs de lever et coucher de lune de Matt « dxprog » Hackmann "
-"et les calculs de phase de la lune de Samir Shah."
+"projet Weather Icons de Erik Flowers, EnzoJS et SteelSeries de Gerrit "
+"Grunwald, JustGage de Bojan Đuričić, OpenWeatherMap PHP API de Christian "
+"Flach, phpcolors de Arlo Carreon, les calculs de lever et coucher de lune de "
+"Matt « dxprog » Heckmann et les calculs de phase de la lune de Samir Shah."
 
 #: admin/partials/live-weather-station-admin-config-about.php:47
 msgid "Data"
@@ -301,24 +304,28 @@ msgstr "Unité de distance"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-justgage.php:15
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:15
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:15
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:15
 msgid "1. Set parameters for the shortcode"
 msgstr "1. Réglez les paramètres du shortcode"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-justgage.php:20
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:20
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:20
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:20
 msgid "Module"
 msgstr "Module"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-justgage.php:33
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:33
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:33
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:33
 msgid "Measurement"
 msgstr "Mesure"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-justgage.php:43
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:43
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:43
 msgid "Design"
 msgstr "Style"
 
@@ -344,40 +351,48 @@ msgstr "Unité"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-justgage.php:121
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:56
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:252
+#: includes/trait-type-description.php:216
+#: includes/trait-type-description.php:222
 msgid "Size"
 msgstr "Taille"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-justgage.php:152
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:112
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:283
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:77
 msgid "Shortcodes for"
 msgstr "Shortcodes pour"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-justgage.php:152
-#: admin/partials/live-weather-station-admin-config-stations.php:143
+#: admin/partials/live-weather-station-admin-config-stations.php:144
 msgid "clean gauge"
 msgstr "jauge élégante"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-justgage.php:283
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:179
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:626
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:136
 msgid "3. Copy the following shortcode"
 msgstr "3. Copiez le shortcode suivant"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-justgage.php:289
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:185
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:632
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:142
 msgid "This shortcode is ready for use."
 msgstr "Ce shortcode est prêt à l’emploi."
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-justgage.php:292
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:188
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:635
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:145
 msgid "Copy"
 msgstr "Copier"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-justgage.php:303
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:166
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:613
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:125
 msgid "2. Verify the generated output"
 msgstr "2. Vérifiez le rendu"
@@ -394,9 +409,71 @@ msgid "Speed"
 msgstr "Vitesse"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-lcd.php:112
-#: admin/partials/live-weather-station-admin-config-stations.php:143
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:161
+#: admin/partials/live-weather-station-admin-config-stations.php:144
 msgid "LCD display"
 msgstr "afficheur LCD"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:56
+msgid "Bezel"
+msgstr "Lunette"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:69
+msgid "Face"
+msgstr "Cadrant"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:82
+msgid "Labels orientation"
+msgstr "Orientation des étiquettes"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:95
+msgid "Main pointer type"
+msgstr "Type pointeur principal"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:108
+msgid "Main pointer color"
+msgstr "Couleur pointeur principal"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:121
+msgid "2nd pointer type"
+msgstr "Type pointeur secondaire"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:134
+msgid "2nd pointer color"
+msgstr "Couleur pointeur secondaire"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:147
+msgid "Knob"
+msgstr "Bouton"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:174
+msgid "Alarm"
+msgstr "Alarme"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:187
+msgid "Trend"
+msgstr "Tendance"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:200
+msgid "Min/max"
+msgstr "Min/max"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:213
+msgid "Index style"
+msgstr "Style de l’index"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:226
+msgid "Index color"
+msgstr "Couleur de l’index"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:239
+msgid "Glass"
+msgstr "Vitre"
+
+#: admin/partials/live-weather-station-admin-config-shortcodes-steelmeter.php:283
+#: admin/partials/live-weather-station-admin-config-stations.php:144
+msgid "steel meter"
+msgstr "compteur métallique"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:43
 msgid "Element"
@@ -408,7 +485,7 @@ msgid "Format"
 msgstr "Format"
 
 #: admin/partials/live-weather-station-admin-config-shortcodes-textual.php:77
-#: admin/partials/live-weather-station-admin-config-stations.php:143
+#: admin/partials/live-weather-station-admin-config-stations.php:144
 msgid "textual datas"
 msgstr "données textuelles"
 
@@ -434,7 +511,7 @@ msgstr "Informations de géolocalisation introuvables"
 
 #: admin/partials/live-weather-station-admin-config-stations.php:31
 #: admin/partials/live-weather-station-admin-config-stations.php:57
-#: includes/trait-type-description.php:67
+#: includes/trait-type-description.php:68
 msgid "Battery level"
 msgstr "Niveau de batterie"
 
@@ -467,15 +544,15 @@ msgstr "Valeurs calculées"
 msgid "Ephemeris"
 msgstr "Éphéméride"
 
-#: admin/partials/live-weather-station-admin-config-stations.php:142
+#: admin/partials/live-weather-station-admin-config-stations.php:143
 msgid "Get shortcodes for "
 msgstr "Obtenir les shortcodes pour"
 
-#: admin/partials/live-weather-station-admin-config-stations.php:155
+#: admin/partials/live-weather-station-admin-config-stations.php:156
 msgid "Get started"
 msgstr "Premiers pas"
 
-#: admin/partials/live-weather-station-admin-config-stations.php:161
+#: admin/partials/live-weather-station-admin-config-stations.php:162
 msgid ""
 "In order to display weather data, <strong><em>Live Weather Station</em></"
 "strong> must be connected to your Netatmo account and/or it must have a "
@@ -501,11 +578,11 @@ msgstr ""
 "\"http://openweathermap.org/appid\" target=\"_blank\">une clé gratuite "
 "OpenWeatherMap</a> et la saisir dans la boite \"Réglages\". "
 
-#: admin/partials/live-weather-station-admin-config-stations.php:166
+#: admin/partials/live-weather-station-admin-config-stations.php:167
 msgid "There is no Netatmo weather station associated with your account."
 msgstr "Il n’y a aucune station météo Netatmo associée à ce compte."
 
-#: admin/partials/live-weather-station-admin-config-stations.php:171
+#: admin/partials/live-weather-station-admin-config-stations.php:172
 msgid ""
 "You have not created any OpenWeatherMap station at the moment, this is why "
 "nothing appears here. To add your first station, visit"
@@ -513,11 +590,11 @@ msgstr ""
 "Vous n’avez pour l’instant créé aucune station OpenWeatherMap, c’est "
 "pourquoi rien n’apparait ici. Pour ajouter une station, rendez vous sur"
 
-#: admin/partials/live-weather-station-admin-config-stations.php:171
+#: admin/partials/live-weather-station-admin-config-stations.php:172
 msgid "the stations management page"
 msgstr "la page de gestion des stations"
 
-#: admin/partials/live-weather-station-admin-config-stations.php:176
+#: admin/partials/live-weather-station-admin-config-stations.php:177
 msgid ""
 "To see data from OpenWeatherMap stations, you must choose another collection "
 "mode in the \"Options\" box."
@@ -851,327 +928,339 @@ msgstr "Vérifier sur une carte"
 msgid "Delete"
 msgstr "Supprimer"
 
-#: includes/trait-datas-output.php:148
+#: includes/trait-datas-output.php:171
 msgid "Outdoor"
 msgstr "Extérieur"
 
-#: includes/trait-datas-output.php:513
+#: includes/trait-datas-output.php:878 includes/trait-type-description.php:98
+#: includes/trait-type-description.php:150
+#: includes/trait-type-description.php:153
+#: includes/trait-type-description.php:163
+#: includes/trait-type-description.php:167
+msgid "Wind"
+msgstr "Vent"
+
+#: includes/trait-datas-output.php:878 includes/trait-type-description.php:156
+#: includes/trait-type-description.php:159
+msgid "Gust"
+msgstr "Rafale"
+
+#: includes/trait-datas-output.php:1074
 msgid "Malformed shortcode. Please verify it!"
 msgstr "Shortcode malformé. Merci de le vérifier !"
 
-#: includes/trait-datas-output.php:613 includes/trait-datas-output.php:618
-#: includes/trait-datas-output.php:623 includes/trait-datas-output.php:628
-#: includes/trait-datas-output.php:633
+#: includes/trait-datas-output.php:1174 includes/trait-datas-output.php:1179
+#: includes/trait-datas-output.php:1184 includes/trait-datas-output.php:1189
+#: includes/trait-datas-output.php:1194
 msgid "N/A"
 msgstr "N/A"
 
-#: includes/trait-datas-output.php:1048
+#: includes/trait-datas-output.php:1609
 msgid "lst hr"
 msgstr "dep 1h"
 
-#: includes/trait-datas-output.php:1052
+#: includes/trait-datas-output.php:1613
 #: public/partials/live-weather-station-widget-outdoor-display.php:154
 msgid "today"
 msgstr "aujrd."
 
-#: includes/trait-datas-output.php:1066 includes/trait-datas-output.php:1080
+#: includes/trait-datas-output.php:1627 includes/trait-datas-output.php:1641
 msgid "gust"
 msgstr "rafale"
 
-#: includes/trait-datas-output.php:1191
-msgid "co2"
-msgstr "co2"
+#: includes/trait-datas-output.php:1752
+msgid "CO₂"
+msgstr "CO₂"
 
-#: includes/trait-datas-output.php:1194
+#: includes/trait-datas-output.php:1755
 msgid "humidity"
 msgstr "humidité"
 
-#: includes/trait-datas-output.php:1197
+#: includes/trait-datas-output.php:1758
 msgid "noise"
 msgstr "bruit"
 
-#: includes/trait-datas-output.php:1202
+#: includes/trait-datas-output.php:1763
 msgid "rain"
 msgstr "pluie"
 
-#: includes/trait-datas-output.php:1205
+#: includes/trait-datas-output.php:1766
 msgid "snow"
 msgstr "neige"
 
-#: includes/trait-datas-output.php:1213
+#: includes/trait-datas-output.php:1774
 msgid "wind"
 msgstr "vent"
 
-#: includes/trait-datas-output.php:1216
+#: includes/trait-datas-output.php:1777
 msgid "atm pressure"
 msgstr "pression atmo"
 
-#: includes/trait-datas-output.php:1219
+#: includes/trait-datas-output.php:1780
 msgid "dew point"
 msgstr "pt de rosée"
 
-#: includes/trait-datas-output.php:1222
+#: includes/trait-datas-output.php:1783
 msgid "frost point"
 msgstr "pt de givre"
 
-#: includes/trait-datas-output.php:1225
+#: includes/trait-datas-output.php:1786
 msgid "heat-index"
 msgstr "indice chaleur"
 
-#: includes/trait-datas-output.php:1228
+#: includes/trait-datas-output.php:1789
 msgid "humidex"
 msgstr "humidex"
 
-#: includes/trait-datas-output.php:1231
+#: includes/trait-datas-output.php:1792
 msgid "wind chill"
 msgstr "rf. éolien"
 
-#: includes/trait-datas-output.php:1234
+#: includes/trait-datas-output.php:1795
 msgid "cloud base"
 msgstr "alt nuages"
 
-#: includes/trait-datas-output.php:1237
+#: includes/trait-datas-output.php:1798
 msgid "cloudiness"
 msgstr "nébulosité"
 
-#: includes/trait-datas-output.php:1242
+#: includes/trait-datas-output.php:1803
 msgid "temperature"
 msgstr "température"
 
-#: includes/trait-datas-output.php:1309 includes/trait-datas-output.php:1497
-#: includes/trait-datas-output.php:1541
+#: includes/trait-datas-output.php:1870 includes/trait-datas-output.php:2058
+#: includes/trait-datas-output.php:2102
 msgid "Very low"
 msgstr "Très faible"
 
-#: includes/trait-datas-output.php:1312
+#: includes/trait-datas-output.php:1873
 msgid "Low"
 msgstr "Faible"
 
-#: includes/trait-datas-output.php:1315 includes/trait-datas-output.php:1494
-#: includes/trait-datas-output.php:1538 includes/trait-javascript-array.php:590
-#: includes/trait-javascript-array.php:606
-#: includes/trait-javascript-array.php:691
+#: includes/trait-datas-output.php:1876 includes/trait-datas-output.php:2055
+#: includes/trait-datas-output.php:2099 includes/trait-javascript-array.php:594
+#: includes/trait-javascript-array.php:679
 msgid "Medium"
 msgstr "Intermédiaire"
 
-#: includes/trait-datas-output.php:1318 includes/trait-datas-output.php:1491
-#: includes/trait-datas-output.php:1535
+#: includes/trait-datas-output.php:1879 includes/trait-datas-output.php:2052
+#: includes/trait-datas-output.php:2096
 msgid "High"
 msgstr "Élevé"
 
-#: includes/trait-datas-output.php:1321 includes/trait-datas-output.php:1488
+#: includes/trait-datas-output.php:1882 includes/trait-datas-output.php:2049
 msgid "Full"
 msgstr "Excellent"
 
-#: includes/trait-datas-output.php:1324
+#: includes/trait-datas-output.php:1885
 msgid "AC Power"
 msgstr "Sur secteur"
 
-#: includes/trait-datas-output.php:1327
+#: includes/trait-datas-output.php:1888
 msgid "Unknown Power State"
 msgstr "Inconnu"
 
-#: includes/trait-datas-output.php:1349 includes/trait-datas-output.php:1379
-#: includes/trait-datas-output.php:1395
+#: includes/trait-datas-output.php:1910 includes/trait-datas-output.php:1940
+#: includes/trait-datas-output.php:1956
 msgid "N"
 msgstr "N"
 
-#: includes/trait-datas-output.php:1350 includes/trait-datas-output.php:1380
+#: includes/trait-datas-output.php:1911 includes/trait-datas-output.php:1941
 msgid "N-NE"
 msgstr "N-NE"
 
-#: includes/trait-datas-output.php:1351 includes/trait-datas-output.php:1381
+#: includes/trait-datas-output.php:1912 includes/trait-datas-output.php:1942
 msgid "NE"
 msgstr "NE"
 
-#: includes/trait-datas-output.php:1352 includes/trait-datas-output.php:1382
+#: includes/trait-datas-output.php:1913 includes/trait-datas-output.php:1943
 msgid "E-NE"
 msgstr "E-NE"
 
-#: includes/trait-datas-output.php:1353 includes/trait-datas-output.php:1383
+#: includes/trait-datas-output.php:1914 includes/trait-datas-output.php:1944
 msgid "E"
 msgstr "E"
 
-#: includes/trait-datas-output.php:1354 includes/trait-datas-output.php:1384
+#: includes/trait-datas-output.php:1915 includes/trait-datas-output.php:1945
 msgid "E-SE"
 msgstr "E-SE"
 
-#: includes/trait-datas-output.php:1355 includes/trait-datas-output.php:1385
+#: includes/trait-datas-output.php:1916 includes/trait-datas-output.php:1946
 msgid "SE"
 msgstr "SE"
 
-#: includes/trait-datas-output.php:1356 includes/trait-datas-output.php:1386
+#: includes/trait-datas-output.php:1917 includes/trait-datas-output.php:1947
 msgid "S-SE"
 msgstr "S-SE"
 
-#: includes/trait-datas-output.php:1357 includes/trait-datas-output.php:1387
+#: includes/trait-datas-output.php:1918 includes/trait-datas-output.php:1948
 msgid "S"
 msgstr "S"
 
-#: includes/trait-datas-output.php:1358 includes/trait-datas-output.php:1388
+#: includes/trait-datas-output.php:1919 includes/trait-datas-output.php:1949
 msgid "S-SW"
 msgstr "S-SO"
 
-#: includes/trait-datas-output.php:1359 includes/trait-datas-output.php:1389
+#: includes/trait-datas-output.php:1920 includes/trait-datas-output.php:1950
 msgid "SW"
 msgstr "SO"
 
-#: includes/trait-datas-output.php:1360 includes/trait-datas-output.php:1390
+#: includes/trait-datas-output.php:1921 includes/trait-datas-output.php:1951
 msgid "W-SW"
 msgstr "O-SO"
 
-#: includes/trait-datas-output.php:1361 includes/trait-datas-output.php:1391
+#: includes/trait-datas-output.php:1922 includes/trait-datas-output.php:1952
 msgid "W"
 msgstr "O"
 
-#: includes/trait-datas-output.php:1362 includes/trait-datas-output.php:1392
+#: includes/trait-datas-output.php:1923 includes/trait-datas-output.php:1953
 msgid "W-NW"
 msgstr "O-NO"
 
-#: includes/trait-datas-output.php:1363 includes/trait-datas-output.php:1393
+#: includes/trait-datas-output.php:1924 includes/trait-datas-output.php:1954
 msgid "NW"
 msgstr "NO"
 
-#: includes/trait-datas-output.php:1364 includes/trait-datas-output.php:1394
+#: includes/trait-datas-output.php:1925 includes/trait-datas-output.php:1955
 msgid "N-NW"
 msgstr "N-NO"
 
-#: includes/trait-datas-output.php:1410 includes/trait-datas-output.php:1426
+#: includes/trait-datas-output.php:1971 includes/trait-datas-output.php:1987
 msgid "North"
 msgstr "Nord"
 
-#: includes/trait-datas-output.php:1411
+#: includes/trait-datas-output.php:1972
 msgid "North-Northeast"
 msgstr "Nord-Nord-Est"
 
-#: includes/trait-datas-output.php:1412
+#: includes/trait-datas-output.php:1973
 msgid "Northeast"
 msgstr "Nord-Est"
 
-#: includes/trait-datas-output.php:1413
+#: includes/trait-datas-output.php:1974
 msgid "East-Northeast"
 msgstr "Est-Nord-Est"
 
-#: includes/trait-datas-output.php:1414
+#: includes/trait-datas-output.php:1975
 msgid "East"
 msgstr "Est"
 
-#: includes/trait-datas-output.php:1415
+#: includes/trait-datas-output.php:1976
 msgid "East-Southeast"
 msgstr "Est-Sud-Est"
 
-#: includes/trait-datas-output.php:1416
+#: includes/trait-datas-output.php:1977
 msgid "Southeast"
 msgstr "Sud-Est"
 
-#: includes/trait-datas-output.php:1417
+#: includes/trait-datas-output.php:1978
 msgid "South-Southeast"
 msgstr "Sud-Sud-Est"
 
-#: includes/trait-datas-output.php:1418
+#: includes/trait-datas-output.php:1979
 msgid "South"
 msgstr "Sud"
 
-#: includes/trait-datas-output.php:1419
+#: includes/trait-datas-output.php:1980
 msgid "South-Southwest"
 msgstr "Sud-Sud-Ouest"
 
-#: includes/trait-datas-output.php:1420
+#: includes/trait-datas-output.php:1981
 msgid "Southwest"
 msgstr "Sud-Ouest"
 
-#: includes/trait-datas-output.php:1421
+#: includes/trait-datas-output.php:1982
 msgid "West-Southwest"
 msgstr "Ouest-Sud-Ouest"
 
-#: includes/trait-datas-output.php:1422
+#: includes/trait-datas-output.php:1983
 msgid "West"
 msgstr "Ouest"
 
-#: includes/trait-datas-output.php:1423
+#: includes/trait-datas-output.php:1984
 msgid "West-Northwest"
 msgstr "Ouest-Nord-Ouest"
 
-#: includes/trait-datas-output.php:1424
+#: includes/trait-datas-output.php:1985
 msgid "Northwest"
 msgstr "Nord-Ouest"
 
-#: includes/trait-datas-output.php:1425
+#: includes/trait-datas-output.php:1986
 msgid "North-Northwest"
 msgstr "Nord-Nord-Ouest"
 
-#: includes/trait-datas-output.php:1500
+#: includes/trait-datas-output.php:2061
 msgid "No RF Signal"
 msgstr "Pas de signal radio"
 
-#: includes/trait-datas-output.php:1544
+#: includes/trait-datas-output.php:2105
 msgid "No WiFi Signal"
 msgstr "Pas de signal WiFi"
 
-#: includes/trait-datas-output.php:1560
+#: includes/trait-datas-output.php:2121
 msgid "Rising"
 msgstr "En hausse"
 
-#: includes/trait-datas-output.php:1563
+#: includes/trait-datas-output.php:2124
 msgid "Falling"
 msgstr "En baisse"
 
-#: includes/trait-datas-output.php:1566
+#: includes/trait-datas-output.php:2127
 msgid "Stable"
 msgstr "Stable"
 
-#: includes/trait-datas-output.php:1579 includes/trait-datas-output.php:1587
+#: includes/trait-datas-output.php:2140 includes/trait-datas-output.php:2148
 msgid "New Moon"
 msgstr "Nouvelle Lune"
 
-#: includes/trait-datas-output.php:1580
+#: includes/trait-datas-output.php:2141
 msgid "Waxing Crescent"
 msgstr "Premier Croissant"
 
-#: includes/trait-datas-output.php:1581
+#: includes/trait-datas-output.php:2142
 msgid "First Quarter"
 msgstr "Premier Quartier"
 
-#: includes/trait-datas-output.php:1582
+#: includes/trait-datas-output.php:2143
 msgid "Waxing Gibbous"
 msgstr "Gibbeuse Croissante"
 
-#: includes/trait-datas-output.php:1583
+#: includes/trait-datas-output.php:2144
 msgid "Full Moon"
 msgstr "Pleine Lune"
 
-#: includes/trait-datas-output.php:1584
+#: includes/trait-datas-output.php:2145
 msgid "Waning Gibbous"
 msgstr "Gibbeuse Décroissante"
 
-#: includes/trait-datas-output.php:1585
+#: includes/trait-datas-output.php:2146
 msgid "Third Quarter"
 msgstr "Dernier Quartier"
 
-#: includes/trait-datas-output.php:1586
+#: includes/trait-datas-output.php:2147
 msgid "Waning Crescent"
 msgstr "Dernier Croissant"
 
-#: includes/trait-datas-output.php:1643 includes/trait-datas-output.php:1768
+#: includes/trait-datas-output.php:2204 includes/trait-datas-output.php:2329
 msgid "Successful operation"
 msgstr "Opération réussie"
 
-#: includes/trait-datas-output.php:1646 includes/trait-datas-output.php:1771
+#: includes/trait-datas-output.php:2207 includes/trait-datas-output.php:2332
 #: includes/trait-datas-query.php:249 includes/trait-datas-query.php:275
 #: includes/trait-datas-query.php:302 includes/trait-datas-query.php:326
 #: includes/trait-datas-query.php:353
 msgid "Database contains inconsistent datas"
 msgstr "La base de données contient des données incohérentes"
 
-#: includes/trait-datas-output.php:1831 includes/trait-datas-output.php:1835
+#: includes/trait-datas-output.php:2392 includes/trait-datas-output.php:2396
 msgid "O/DR"
 msgstr "EXT"
 
-#: includes/trait-datas-output.php:1901
+#: includes/trait-datas-output.php:2462
 msgid "clouds"
 msgstr "nuages"
 
-#: includes/trait-datas-output.php:2002
+#: includes/trait-datas-output.php:2563
 msgid "All data have been filtered: nothing to show"
 msgstr "Toutes les donnée ont été filtrées : il n’y a plus rien à afficher"
 
@@ -1301,9 +1390,9 @@ msgid "Module type"
 msgstr "Type du module"
 
 #: includes/trait-javascript-array.php:262
-#: includes/trait-javascript-array.php:789
-#: includes/trait-javascript-array.php:792
-#: includes/trait-javascript-array.php:793
+#: includes/trait-javascript-array.php:782
+#: includes/trait-javascript-array.php:786
+#: includes/trait-javascript-array.php:787
 msgid "Module name"
 msgstr "Nom du module"
 
@@ -1312,9 +1401,9 @@ msgid "Measurement timestamp"
 msgstr "Horodatage de la mesure"
 
 #: includes/trait-javascript-array.php:264
-#: includes/trait-javascript-array.php:790
-#: includes/trait-javascript-array.php:793
-#: includes/trait-javascript-array.php:794
+#: includes/trait-javascript-array.php:784
+#: includes/trait-javascript-array.php:787
+#: includes/trait-javascript-array.php:789
 msgid "Measurement type"
 msgstr "Type de la mesure"
 
@@ -1330,468 +1419,970 @@ msgstr "Type de la mesure"
 msgid "Measurement value"
 msgstr "Valeur de la mesure"
 
-#: includes/trait-javascript-array.php:534
+#: includes/trait-javascript-array.php:538
 msgid "[all modules]"
 msgstr "[tous les modules]"
 
-#: includes/trait-javascript-array.php:589
-#: includes/trait-javascript-array.php:690
-msgid "Small"
-msgstr "Petit"
-
-#: includes/trait-javascript-array.php:591
-#: includes/trait-javascript-array.php:692
-msgid "Large"
-msgstr "Grand"
-
-#: includes/trait-javascript-array.php:592
-#: includes/trait-javascript-array.php:693
-msgid "Scalable"
-msgstr "Dimensionnable"
-
-#: includes/trait-javascript-array.php:605
+#: includes/trait-javascript-array.php:593
 msgid "Fast"
 msgstr "Rapide"
 
-#: includes/trait-javascript-array.php:607
+#: includes/trait-javascript-array.php:595
 msgid "Slow"
 msgstr "Lent"
 
-#: includes/trait-javascript-array.php:620
+#: includes/trait-javascript-array.php:608
+#: includes/trait-javascript-array.php:1015
 msgid "Standard - Without backlight"
 msgstr "Standard - Sans rétro-éclairage"
 
-#: includes/trait-javascript-array.php:621
+#: includes/trait-javascript-array.php:609
 msgid "Standard - With backlight"
 msgstr "Standard - Avec rétro-éclairage"
 
-#: includes/trait-javascript-array.php:622
+#: includes/trait-javascript-array.php:610
+#: includes/trait-javascript-array.php:1016
 msgid "Translucent - Red"
 msgstr "Translucide - Rouge"
 
-#: includes/trait-javascript-array.php:623
+#: includes/trait-javascript-array.php:611
+#: includes/trait-javascript-array.php:1017
 msgid "Translucent - Orange"
 msgstr "Translucide - Orange"
 
-#: includes/trait-javascript-array.php:624
+#: includes/trait-javascript-array.php:612
+#: includes/trait-javascript-array.php:1018
 msgid "Translucent - Beige"
 msgstr "Translucide - Beige"
 
-#: includes/trait-javascript-array.php:625
+#: includes/trait-javascript-array.php:613
 msgid "Translucent - Yellow"
 msgstr "Translucide - Jaune"
 
-#: includes/trait-javascript-array.php:626
+#: includes/trait-javascript-array.php:614
+#: includes/trait-javascript-array.php:1019
 msgid "Translucent - Yellow green"
 msgstr "Translucide - Jaune-vert"
 
-#: includes/trait-javascript-array.php:627
+#: includes/trait-javascript-array.php:615
 msgid "Translucent - Light green"
 msgstr "Translucide - Vert clair"
 
-#: includes/trait-javascript-array.php:628
+#: includes/trait-javascript-array.php:616
+#: includes/trait-javascript-array.php:1020
 msgid "Translucent - Standard green"
 msgstr "Translucide - Vert standard"
 
-#: includes/trait-javascript-array.php:629
+#: includes/trait-javascript-array.php:617
+#: includes/trait-javascript-array.php:1021
 msgid "Translucent - Light blue"
 msgstr "Translucide - Bleu clair"
 
-#: includes/trait-javascript-array.php:630
+#: includes/trait-javascript-array.php:618
+#: includes/trait-javascript-array.php:1022
 msgid "Translucent - Blue"
 msgstr "Translucide - Bleu"
 
-#: includes/trait-javascript-array.php:631
+#: includes/trait-javascript-array.php:619
+#: includes/trait-javascript-array.php:1024
 msgid "Translucent - Light purple"
 msgstr "Translucide - Violet"
 
-#: includes/trait-javascript-array.php:632
+#: includes/trait-javascript-array.php:620
+#: includes/trait-javascript-array.php:1025
 msgid "Translucent - Gray"
 msgstr "Translucide - Gris"
 
-#: includes/trait-javascript-array.php:633
+#: includes/trait-javascript-array.php:621
+#: includes/trait-javascript-array.php:1023
 msgid "Translucent - White"
 msgstr "Translucide - Blanc"
 
-#: includes/trait-javascript-array.php:634
+#: includes/trait-javascript-array.php:622
+#: includes/trait-javascript-array.php:1026
 msgid "Contrasted - Red"
 msgstr "Contrasté - Rouge"
 
-#: includes/trait-javascript-array.php:635
+#: includes/trait-javascript-array.php:623
 msgid "Contrasted - Amber"
 msgstr "Contrasté - Ambre"
 
-#: includes/trait-javascript-array.php:636
+#: includes/trait-javascript-array.php:624
 msgid "Contrasted - Green"
 msgstr "Contrasté - Vert"
 
-#: includes/trait-javascript-array.php:637
+#: includes/trait-javascript-array.php:625
+#: includes/trait-javascript-array.php:1027
 msgid "Contrasted - Turquoise"
 msgstr "Contrasté - Turquoise"
 
-#: includes/trait-javascript-array.php:638
+#: includes/trait-javascript-array.php:626
 msgid "Contrasted - Light blue"
 msgstr "Contrasté - Bleu clair"
 
-#: includes/trait-javascript-array.php:639
+#: includes/trait-javascript-array.php:627
+#: includes/trait-javascript-array.php:1030
 msgid "Contrasted - Blue"
 msgstr "Contrasté - Bleu"
 
-#: includes/trait-javascript-array.php:640
+#: includes/trait-javascript-array.php:628
+#: includes/trait-javascript-array.php:1031
 msgid "Contrasted - Dark blue"
 msgstr "Contrasté - Bleu foncé"
 
-#: includes/trait-javascript-array.php:641
+#: includes/trait-javascript-array.php:629
 msgid "Contrasted - Purple"
 msgstr "Contrasté - Violine"
 
-#: includes/trait-javascript-array.php:642
+#: includes/trait-javascript-array.php:630
 msgid "Contrasted - Dark purple"
 msgstr "Contrasté - Violet foncé"
 
-#: includes/trait-javascript-array.php:643
+#: includes/trait-javascript-array.php:631
 msgid "Contrasted - Black & Yellow"
 msgstr "Contrasté - Noir & Jaune"
 
-#: includes/trait-javascript-array.php:644
+#: includes/trait-javascript-array.php:632
+#: includes/trait-javascript-array.php:1029
 msgid "Contrasted - Black"
 msgstr "Contrasté - Noir"
 
-#: includes/trait-javascript-array.php:645
+#: includes/trait-javascript-array.php:633
+#: includes/trait-javascript-array.php:1028
 msgid "Contrasted - Dark grey"
 msgstr "Contrasté - Gris foncé"
 
-#: includes/trait-javascript-array.php:646
+#: includes/trait-javascript-array.php:634
+#: includes/trait-javascript-array.php:1032
 msgid "Soft - Amber"
 msgstr "Feutré - Ambre"
 
-#: includes/trait-javascript-array.php:647
+#: includes/trait-javascript-array.php:635
+#: includes/trait-javascript-array.php:1033
 msgid "Soft - Dark green"
 msgstr "Feutré - Vert foncé"
 
-#: includes/trait-javascript-array.php:648
+#: includes/trait-javascript-array.php:636
+#: includes/trait-javascript-array.php:1034
 msgid "Soft - Blue"
 msgstr "Feutré - Bleu"
 
-#: includes/trait-javascript-array.php:649
+#: includes/trait-javascript-array.php:637
+#: includes/trait-javascript-array.php:1035
 msgid "Soft - Dark blue"
 msgstr "Feutré - Bleu foncé"
 
-#: includes/trait-javascript-array.php:650
+#: includes/trait-javascript-array.php:638
 msgid "Soft - Navy"
 msgstr "Feutré - Bleu marine"
 
-#: includes/trait-javascript-array.php:651
+#: includes/trait-javascript-array.php:639
+#: includes/trait-javascript-array.php:1036
 msgid "Soft - Purple"
 msgstr "Feutré - Violet"
 
-#: includes/trait-javascript-array.php:652
+#: includes/trait-javascript-array.php:640
 msgid "Soft - Dark purple"
 msgstr "Feutré - Violet foncé"
 
-#: includes/trait-javascript-array.php:653
+#: includes/trait-javascript-array.php:641
 msgid "Soft - Grey"
 msgstr "Feutré - Gris"
 
-#: includes/trait-javascript-array.php:654
+#: includes/trait-javascript-array.php:642
 msgid "Flat - Pomegranate"
 msgstr "Flat - Grenade"
 
-#: includes/trait-javascript-array.php:655
+#: includes/trait-javascript-array.php:643
 msgid "Flat - Alizarin"
 msgstr "Flat - Alizarine"
 
-#: includes/trait-javascript-array.php:656
+#: includes/trait-javascript-array.php:644
 msgid "Flat - Pumpkin"
 msgstr "Flat - Citrouille"
 
-#: includes/trait-javascript-array.php:657
+#: includes/trait-javascript-array.php:645
 msgid "Flat - Carrot"
 msgstr "Flat - Carotte"
 
-#: includes/trait-javascript-array.php:658
+#: includes/trait-javascript-array.php:646
 msgid "Flat - Orange"
 msgstr "Flat - Orange"
 
-#: includes/trait-javascript-array.php:659
+#: includes/trait-javascript-array.php:647
 msgid "Flat - Sunflower"
 msgstr "Flat - Tournesol"
 
-#: includes/trait-javascript-array.php:660
+#: includes/trait-javascript-array.php:648
 msgid "Flat - Emerald"
 msgstr "Flat - Émeraude"
 
-#: includes/trait-javascript-array.php:661
+#: includes/trait-javascript-array.php:649
 msgid "Flat - Nephritis"
 msgstr "Flat - Néphrite"
 
-#: includes/trait-javascript-array.php:662
+#: includes/trait-javascript-array.php:650
 msgid "Flat - Turquoise"
 msgstr "Flat - Turquoise"
 
-#: includes/trait-javascript-array.php:663
+#: includes/trait-javascript-array.php:651
 msgid "Flat - Peter river"
 msgstr "Flat - Rivière Peter"
 
-#: includes/trait-javascript-array.php:664
+#: includes/trait-javascript-array.php:652
 msgid "Flat - Sky"
 msgstr "Flat - Ciel"
 
-#: includes/trait-javascript-array.php:665
+#: includes/trait-javascript-array.php:653
 msgid "Flat - Belize hole"
 msgstr "Flat - Trou Belize"
 
-#: includes/trait-javascript-array.php:666
+#: includes/trait-javascript-array.php:654
 msgid "Flat - Amethyst"
 msgstr "Flat - Améthyste"
 
-#: includes/trait-javascript-array.php:667
+#: includes/trait-javascript-array.php:655
 msgid "Flat - Wisteria"
 msgstr "Flat - Glycines"
 
-#: includes/trait-javascript-array.php:668
+#: includes/trait-javascript-array.php:656
 msgid "Flat - Wet asphalt"
 msgstr "Flat - Asphalte mouillé"
 
-#: includes/trait-javascript-array.php:669
+#: includes/trait-javascript-array.php:657
 msgid "Flat - Midnight blue"
 msgstr "Flat - Bleu nuit"
 
-#: includes/trait-javascript-array.php:670
+#: includes/trait-javascript-array.php:658
 msgid "Flat - Black"
 msgstr "Flat - Noir"
 
-#: includes/trait-javascript-array.php:671
+#: includes/trait-javascript-array.php:659
 msgid "Flat - Asbestos"
 msgstr "Flat - Amiante"
 
-#: includes/trait-javascript-array.php:672
+#: includes/trait-javascript-array.php:660
 msgid "Flat - Concrete"
 msgstr "Flat - Béton"
 
-#: includes/trait-javascript-array.php:673
+#: includes/trait-javascript-array.php:661
 msgid "Flat - Silver"
 msgstr "Flat - Argenté"
 
-#: includes/trait-javascript-array.php:674
+#: includes/trait-javascript-array.php:662
 msgid "Flat - Clouds"
 msgstr "Flat - Nuages"
 
-#: includes/trait-javascript-array.php:688
+#: includes/trait-javascript-array.php:676
 msgid "Miniature"
 msgstr "Miniature"
 
-#: includes/trait-javascript-array.php:706
+#: includes/trait-javascript-array.php:678
+msgid "Small"
+msgstr "Petit"
+
+#: includes/trait-javascript-array.php:680
+msgid "Large"
+msgstr "Grand"
+
+#: includes/trait-javascript-array.php:682
+msgid "Scalable"
+msgstr "Dimensionnable"
+
+#: includes/trait-javascript-array.php:685
+msgid "Gigantic"
+msgstr "Gigantesque"
+
+#: includes/trait-javascript-array.php:699
 msgid "Standard (for light background)"
 msgstr "Standard (pour fond clair)"
 
-#: includes/trait-javascript-array.php:707
+#: includes/trait-javascript-array.php:700
 msgid "Standard (for dark background)"
 msgstr "Standard (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:708
+#: includes/trait-javascript-array.php:701
 msgid "Flag (for light background)"
 msgstr "Étendard (pour fond clair)"
 
-#: includes/trait-javascript-array.php:709
+#: includes/trait-javascript-array.php:702
 msgid "Flag (for dark background)"
 msgstr "Étendard (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:710
+#: includes/trait-javascript-array.php:703
 msgid "Pinky (for light background)"
 msgstr "Rosé (pour fond clair)"
 
-#: includes/trait-javascript-array.php:711
+#: includes/trait-javascript-array.php:704
 msgid "Pinky (for dark background)"
 msgstr "Rosé (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:712
+#: includes/trait-javascript-array.php:705
 msgid "Aquamarine (for light background)"
 msgstr "Aigue-marine (pour fond clair)"
 
-#: includes/trait-javascript-array.php:713
+#: includes/trait-javascript-array.php:706
 msgid "Aquamarine (for dark background)"
 msgstr "Aigue-marine (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:714
+#: includes/trait-javascript-array.php:707
 msgid "B&W (for light background)"
 msgstr "N&B (pour fond clair)"
 
-#: includes/trait-javascript-array.php:715
+#: includes/trait-javascript-array.php:708
 msgid "B&W (for dark background)"
 msgstr "N&B (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:716
+#: includes/trait-javascript-array.php:709
 msgid "Solid red (for light background)"
 msgstr "Rouge uni (pour fond clair)"
 
-#: includes/trait-javascript-array.php:717
+#: includes/trait-javascript-array.php:710
 msgid "Solid red (for dark background)"
 msgstr "Rouge uni (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:718
+#: includes/trait-javascript-array.php:711
 msgid "Solid orange (for light background)"
 msgstr "Orange uni (pour fond clair)"
 
-#: includes/trait-javascript-array.php:719
+#: includes/trait-javascript-array.php:712
 msgid "Solid orange (for dark background)"
 msgstr "Orange uni (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:720
+#: includes/trait-javascript-array.php:713
 msgid "Solid yellow (for light background)"
 msgstr "Jaune uni (pour fond clair)"
 
-#: includes/trait-javascript-array.php:721
+#: includes/trait-javascript-array.php:714
 msgid "Solid yellow (for dark background)"
 msgstr "Jaune uni (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:722
+#: includes/trait-javascript-array.php:715
 msgid "Solid green (for light background)"
 msgstr "Vert uni (pour fond clair)"
 
-#: includes/trait-javascript-array.php:723
+#: includes/trait-javascript-array.php:716
 msgid "Solid green (for dark background)"
 msgstr "Vert uni (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:724
+#: includes/trait-javascript-array.php:717
 msgid "Solid blue (for light background)"
 msgstr "Bleu uni (pour fond clair)"
 
-#: includes/trait-javascript-array.php:725
+#: includes/trait-javascript-array.php:718
 msgid "Solid blue (for dark background)"
 msgstr "Bleu uni (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:726
+#: includes/trait-javascript-array.php:719
 msgid "Solid purple (for light background)"
 msgstr "Violet uni (pour fond clair)"
 
-#: includes/trait-javascript-array.php:727
+#: includes/trait-javascript-array.php:720
 msgid "Solid purple (for dark background)"
 msgstr "Violet uni (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:728
+#: includes/trait-javascript-array.php:721
 msgid "Solid black (for light background)"
 msgstr "Noir uni (pour fond clair)"
 
-#: includes/trait-javascript-array.php:729
+#: includes/trait-javascript-array.php:722
 msgid "Solid black (for dark background)"
 msgstr "Noir uni (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:730
+#: includes/trait-javascript-array.php:723
 msgid "Transparent (for light background)"
 msgstr "Transparent (pour fond clair)"
 
-#: includes/trait-javascript-array.php:731
+#: includes/trait-javascript-array.php:724
 msgid "Transparent (for dark background)"
 msgstr "Transparent (pour fond sombre)"
 
-#: includes/trait-javascript-array.php:744
-#: includes/trait-javascript-array.php:787
-#: includes/trait-javascript-array.php:807
+#: includes/trait-javascript-array.php:737
+#: includes/trait-javascript-array.php:780
+#: includes/trait-javascript-array.php:802
+#: includes/trait-javascript-array.php:995
+#: includes/trait-javascript-array.php:1014
+#: includes/trait-javascript-array.php:1048
+#: includes/trait-javascript-array.php:1133
 msgid "None"
 msgstr "Aucun"
 
-#: includes/trait-javascript-array.php:745
+#: includes/trait-javascript-array.php:738
 msgid "External"
 msgstr "Externe"
 
-#: includes/trait-javascript-array.php:746
+#: includes/trait-javascript-array.php:739
 msgid "Internal"
 msgstr "Interne"
 
-#: includes/trait-javascript-array.php:759
+#: includes/trait-javascript-array.php:752
 msgid "Half - Flat - Thin"
 msgstr "Demi cercle - Flat - Fin"
 
-#: includes/trait-javascript-array.php:760
+#: includes/trait-javascript-array.php:753
 msgid "Half - Flat - Standard"
 msgstr "Demi cercle - Flat - Standard"
 
-#: includes/trait-javascript-array.php:761
+#: includes/trait-javascript-array.php:754
 msgid "Half - Flat - Fat"
 msgstr "Demi cercle - Flat - Gras"
 
-#: includes/trait-javascript-array.php:762
+#: includes/trait-javascript-array.php:755
 msgid "Half - Flat - Pie"
 msgstr "Demi cercle - Flat - Plein"
 
-#: includes/trait-javascript-array.php:763
+#: includes/trait-javascript-array.php:756
 msgid "Half - 3D - Thin"
 msgstr "Demi cercle - 3D - Fin"
 
-#: includes/trait-javascript-array.php:764
+#: includes/trait-javascript-array.php:757
 msgid "Half - 3D - Standard"
 msgstr "Demi cercle - 3D - Standard"
 
-#: includes/trait-javascript-array.php:765
+#: includes/trait-javascript-array.php:758
 msgid "Half - 3D - Fat"
 msgstr "Demi cercle - 3D - Gras"
 
-#: includes/trait-javascript-array.php:766
+#: includes/trait-javascript-array.php:759
 msgid "Half - 3D - Pie"
 msgstr "Demi cercle - 3D - Plein"
 
-#: includes/trait-javascript-array.php:767
+#: includes/trait-javascript-array.php:760
 msgid "Full - Flat - Thin"
 msgstr "Cercle - Flat - Fin"
 
-#: includes/trait-javascript-array.php:768
+#: includes/trait-javascript-array.php:761
 msgid "Full - Flat - Standard"
 msgstr "Cercle - Flat - Standard"
 
-#: includes/trait-javascript-array.php:769
+#: includes/trait-javascript-array.php:762
 msgid "Full - Flat - Fat"
 msgstr "Cercle - Flat - Gras"
 
-#: includes/trait-javascript-array.php:770
+#: includes/trait-javascript-array.php:763
 msgid "Full - Flat - Pie"
 msgstr "Cercle - Flat - Plein"
 
-#: includes/trait-javascript-array.php:771
+#: includes/trait-javascript-array.php:764
 msgid "Full - 3D - Thin"
 msgstr "Cercle - 3D - Fin"
 
-#: includes/trait-javascript-array.php:772
+#: includes/trait-javascript-array.php:765
 msgid "Full - 3D - Standard"
 msgstr "Cercle - 3D - Standard"
 
-#: includes/trait-javascript-array.php:773
+#: includes/trait-javascript-array.php:766
 msgid "Full - 3D - Fat"
 msgstr "Cercle - 3D - Gras"
 
-#: includes/trait-javascript-array.php:774
+#: includes/trait-javascript-array.php:767
 msgid "Full - 3D - Pie"
 msgstr "Cercle - 3D - Plein"
 
-#: includes/trait-javascript-array.php:791
-#: includes/trait-javascript-array.php:794
-#: includes/trait-javascript-array.php:808
+#: includes/trait-javascript-array.php:783
+#: includes/trait-javascript-array.php:788
+msgid "Short measurement type"
+msgstr "Type raccourci de mesure"
+
+#: includes/trait-javascript-array.php:785
+#: includes/trait-javascript-array.php:788
+#: includes/trait-javascript-array.php:789
+#: includes/trait-javascript-array.php:803
 msgid "Measurement unit"
 msgstr "Unité de la mesure"
 
-#: includes/trait-javascript-array.php:821
+#: includes/trait-javascript-array.php:816
 msgid "Test with actual background"
 msgstr "Tester avec le fond actuel"
 
-#: includes/trait-javascript-array.php:822
+#: includes/trait-javascript-array.php:817
 msgid "Test with white background"
 msgstr "Tester avec un fond blanc"
 
-#: includes/trait-javascript-array.php:823
+#: includes/trait-javascript-array.php:818
 msgid "Test with light background"
 msgstr "Tester avec un fond clair"
 
-#: includes/trait-javascript-array.php:824
+#: includes/trait-javascript-array.php:819
 msgid "Test with medium background"
 msgstr "Tester avec un fond moyen"
 
-#: includes/trait-javascript-array.php:825
+#: includes/trait-javascript-array.php:820
 msgid "Test with dark background"
 msgstr "Tester avec un fond sombre"
 
-#: includes/trait-javascript-array.php:826
+#: includes/trait-javascript-array.php:821
 msgid "Test with black background"
 msgstr "Tester avec un fond noir"
+
+#: includes/trait-javascript-array.php:834
+msgid "Analog - 1/4"
+msgstr "Analogique - 1/4"
+
+#: includes/trait-javascript-array.php:835
+msgid "Analog - half"
+msgstr "Analogique - demi"
+
+#: includes/trait-javascript-array.php:836
+msgid "Analog - 3/4"
+msgstr "Analogique - 3/4"
+
+#: includes/trait-javascript-array.php:837
+msgid "Analog - full"
+msgstr "Analogique - complet"
+
+#: includes/trait-javascript-array.php:838
+msgid "Digital - 1/4"
+msgstr "Numérique - 1/4"
+
+#: includes/trait-javascript-array.php:839
+msgid "Digital - half"
+msgstr "Numérique - demi"
+
+#: includes/trait-javascript-array.php:840
+msgid "Digital - 3/4"
+msgstr "Numérique - 3/4"
+
+#: includes/trait-javascript-array.php:841
+msgid "Digital - full"
+msgstr "Numérique - complet"
+
+#: includes/trait-javascript-array.php:842
+msgid "Top meter"
+msgstr "Compteur haut"
+
+#: includes/trait-javascript-array.php:843
+msgid "Left meter"
+msgstr "Compteur gauche"
+
+#: includes/trait-javascript-array.php:844
+msgid "Right meter"
+msgstr "Compteur droit"
+
+#: includes/trait-javascript-array.php:845
+msgid "Vintage wind compass"
+msgstr "Compas de vent vintage"
+
+#: includes/trait-javascript-array.php:846
+msgid "Standard wind compass"
+msgstr "Compas de vent standard"
+
+#: includes/trait-javascript-array.php:847
+msgid "Modern wind compass"
+msgstr "Compas de vent moderne"
+
+#: includes/trait-javascript-array.php:848
+msgid "Altimeter"
+msgstr "Altimètre"
+
+#: includes/trait-javascript-array.php:860
+msgid "Black metal"
+msgstr "Métallique noir"
+
+#: includes/trait-javascript-array.php:861
+msgid "Metal"
+msgstr "Métallique"
+
+#: includes/trait-javascript-array.php:862
+msgid "Shiny metal"
+msgstr "Métallique mat"
+
+#: includes/trait-javascript-array.php:863
+msgid "Glossy metal"
+msgstr "Métallique brillant"
+
+#: includes/trait-javascript-array.php:864
+#: includes/trait-javascript-array.php:892
+msgid "Anthracite"
+msgstr "Anthracite"
+
+#: includes/trait-javascript-array.php:865
+msgid "Tilted gray"
+msgstr "Gris poli"
+
+#: includes/trait-javascript-array.php:866
+msgid "Tilted black"
+msgstr "Noir poli"
+
+#: includes/trait-javascript-array.php:867
+msgid "Brass"
+msgstr "Cuivre"
+
+#: includes/trait-javascript-array.php:868
+msgid "Steel"
+msgstr "Acier"
+
+#: includes/trait-javascript-array.php:869
+msgid "Chrome"
+msgstr "Chrome"
+
+#: includes/trait-javascript-array.php:870
+msgid "Gold"
+msgstr "Or"
+
+#: includes/trait-javascript-array.php:882
+msgid "Dark gray"
+msgstr "Gris sombre"
+
+#: includes/trait-javascript-array.php:883
+msgid "Satin gray"
+msgstr "Gris satin"
+
+#: includes/trait-javascript-array.php:884
+msgid "Light gray"
+msgstr "Gris léger"
+
+#: includes/trait-javascript-array.php:885
+#: includes/trait-javascript-array.php:964
+#: includes/trait-javascript-array.php:1119
+msgid "White"
+msgstr "Blanc"
+
+#: includes/trait-javascript-array.php:886
+#: includes/trait-javascript-array.php:966
+#: includes/trait-javascript-array.php:1122
+msgid "Black"
+msgstr "Noir"
+
+#: includes/trait-javascript-array.php:887
+msgid "Beige"
+msgstr "Beige"
+
+#: includes/trait-javascript-array.php:888
+msgid "Brown"
+msgstr "Marron"
+
+#: includes/trait-javascript-array.php:889
+#: includes/trait-javascript-array.php:954
+#: includes/trait-javascript-array.php:996
+#: includes/trait-javascript-array.php:1106
+msgid "Red"
+msgstr "Rouge"
+
+#: includes/trait-javascript-array.php:890
+#: includes/trait-javascript-array.php:957
+#: includes/trait-javascript-array.php:999
+#: includes/trait-javascript-array.php:1111
+msgid "Green"
+msgstr "Vert"
+
+#: includes/trait-javascript-array.php:891
+#: includes/trait-javascript-array.php:962
+#: includes/trait-javascript-array.php:1001
+#: includes/trait-javascript-array.php:1115
+msgid "Blue"
+msgstr "Bleu"
+
+#: includes/trait-javascript-array.php:893
+msgid "Mud"
+msgstr "Boue"
+
+#: includes/trait-javascript-array.php:894
+msgid "Punched sheet"
+msgstr "Poinçonné"
+
+#: includes/trait-javascript-array.php:895
+msgid "Carbon"
+msgstr "Carbone"
+
+#: includes/trait-javascript-array.php:896
+msgid "Stainless"
+msgstr "Inox"
+
+#: includes/trait-javascript-array.php:897
+msgid "Brushed metal"
+msgstr "Métal brossé"
+
+#: includes/trait-javascript-array.php:898
+msgid "Brushed stainless"
+msgstr "Inox brossé"
+
+#: includes/trait-javascript-array.php:899
+msgid "Turned"
+msgstr "Tourné"
+
+#: includes/trait-javascript-array.php:911
+msgid "Standard glass"
+msgstr "Verre standard"
+
+#: includes/trait-javascript-array.php:912
+msgid "Crystal"
+msgstr "Cristal"
+
+#: includes/trait-javascript-array.php:913
+msgid "Sapphire crystal"
+msgstr "Cristal de saphir"
+
+#: includes/trait-javascript-array.php:914
+msgid "Plexiglass"
+msgstr "Plexiglas"
+
+#: includes/trait-javascript-array.php:915
+msgid "Rhodoid"
+msgstr "Rhodoïd"
+
+#: includes/trait-javascript-array.php:927
+msgid "Thin triangle"
+msgstr "Triangle mince"
+
+#: includes/trait-javascript-array.php:928
+msgid "Fat Triangle"
+msgstr "Triangle épais"
+
+#: includes/trait-javascript-array.php:929
+msgid "3D triangle"
+msgstr "Triangle 3D"
+
+#: includes/trait-javascript-array.php:930
+msgid "Clipped"
+msgstr "Coupé"
+
+#: includes/trait-javascript-array.php:931
+msgid "Double clipped"
+msgstr "Double coupé"
+
+#: includes/trait-javascript-array.php:932
+msgid "Flat clipped"
+msgstr "Coupé plat"
+
+#: includes/trait-javascript-array.php:933
+msgid "Thin rod"
+msgstr "Tige mince"
+
+#: includes/trait-javascript-array.php:934
+msgid "Fat rod"
+msgstr "Tige épaisse"
+
+#: includes/trait-javascript-array.php:935
+msgid "Thin curved triangle"
+msgstr "Triangle incurvée mince"
+
+#: includes/trait-javascript-array.php:936
+msgid "3D curved triangle"
+msgstr "Triangle incurvé 3D"
+
+#: includes/trait-javascript-array.php:937
+msgid "Double needle"
+msgstr "Aiguille double"
+
+#: includes/trait-javascript-array.php:938
+msgid "Culbuto"
+msgstr "Culbuto"
+
+#: includes/trait-javascript-array.php:939
+msgid "Cessna"
+msgstr "Cessna"
+
+#: includes/trait-javascript-array.php:940
+msgid "Volvo"
+msgstr "Volvo"
+
+#: includes/trait-javascript-array.php:941
+msgid "Ferrari"
+msgstr "Ferrari"
+
+#: includes/trait-javascript-array.php:942
+msgid "Ferrari arched"
+msgstr "Ferrari arqué"
+
+#: includes/trait-javascript-array.php:955
+#: includes/trait-javascript-array.php:997
+#: includes/trait-javascript-array.php:1108
+msgid "Orange"
+msgstr "Orange"
+
+#: includes/trait-javascript-array.php:956
+#: includes/trait-javascript-array.php:998
+#: includes/trait-javascript-array.php:1109
+msgid "Yellow"
+msgstr "Jaune"
+
+#: includes/trait-javascript-array.php:958
+msgid "JUG Green"
+msgstr "Vert JUG"
+
+#: includes/trait-javascript-array.php:959
+msgid "Green LCD"
+msgstr "Vert LCD"
+
+#: includes/trait-javascript-array.php:960
+#: includes/trait-javascript-array.php:1000
+msgid "Cyan"
+msgstr "Cyan"
+
+#: includes/trait-javascript-array.php:961
+msgid "Raith"
+msgstr "Bleu gris"
+
+#: includes/trait-javascript-array.php:963
+#: includes/trait-javascript-array.php:1002
+msgid "Magenta"
+msgstr "Magenta"
+
+#: includes/trait-javascript-array.php:965
+#: includes/trait-javascript-array.php:1121
+msgid "Gray"
+msgstr "Gris"
+
+#: includes/trait-javascript-array.php:978
+msgid "Plain - Black"
+msgstr "Complet - Noir"
+
+#: includes/trait-javascript-array.php:979
+msgid "Plain - Brass"
+msgstr "Complet - Laiton"
+
+#: includes/trait-javascript-array.php:980
+msgid "Plain - Silver"
+msgstr "Complet - Argent"
+
+#: includes/trait-javascript-array.php:981
+msgid "Embossed - Black"
+msgstr "Évidé - Noir"
+
+#: includes/trait-javascript-array.php:982
+msgid "Embossed - Brass"
+msgstr "Évidé - Laiton"
+
+#: includes/trait-javascript-array.php:983
+msgid "Embossed - Silver"
+msgstr "Évidé - Argent"
+
+#: includes/trait-javascript-array.php:1049
+msgid "Cursors"
+msgstr "Curseurs"
+
+#: includes/trait-javascript-array.php:1091
+msgid "Automatic"
+msgstr "Automatique"
+
+#: includes/trait-javascript-array.php:1092
+msgid "Normal"
+msgstr "Normal"
+
+#: includes/trait-javascript-array.php:1093
+msgid "Horizontal"
+msgstr "Horizontal"
+
+#: includes/trait-javascript-array.php:1094
+msgid "Tangent"
+msgstr "Tangent"
+
+#: includes/trait-javascript-array.php:1107
+msgid "Maroon"
+msgstr "Marron"
+
+#: includes/trait-javascript-array.php:1110
+msgid "Lime"
+msgstr "Citron vert"
+
+#: includes/trait-javascript-array.php:1112
+msgid "Teal"
+msgstr "Bleu sarcelle"
+
+#: includes/trait-javascript-array.php:1113
+msgid "Aqua"
+msgstr "Aqua"
+
+#: includes/trait-javascript-array.php:1114
+msgid "Light blue"
+msgstr "Bleu clair"
+
+#: includes/trait-javascript-array.php:1116
+msgid "Navy"
+msgstr "Bleu marine"
+
+#: includes/trait-javascript-array.php:1117
+msgid "Fuchsia"
+msgstr "Fuchsia"
+
+#: includes/trait-javascript-array.php:1118
+msgid "Purple"
+msgstr "Pourpre"
+
+#: includes/trait-javascript-array.php:1120
+msgid "Silver"
+msgstr "Argent"
+
+#: includes/trait-javascript-array.php:1134
+msgid "Plain - Translucent"
+msgstr "Uni - Transparent"
+
+#: includes/trait-javascript-array.php:1135
+msgid "Plain - Liquid"
+msgstr "Uni - Liquide"
+
+#: includes/trait-javascript-array.php:1136
+msgid "Plain - Soft"
+msgstr "Uni - Feutré"
+
+#: includes/trait-javascript-array.php:1137
+msgid "Plain - Hard"
+msgstr "Uni - Contrasté"
+
+#: includes/trait-javascript-array.php:1138
+msgid "Fade-in - Translucent"
+msgstr "Fondu en entrée - Transparent"
+
+#: includes/trait-javascript-array.php:1139
+msgid "Fade-in - Liquid"
+msgstr "Fondu en entrée - Liquide"
+
+#: includes/trait-javascript-array.php:1140
+msgid "Fade-in - Soft"
+msgstr "Fondu en entrée - Feutré"
+
+#: includes/trait-javascript-array.php:1141
+msgid "Fade-in - Hard"
+msgstr "Fondu en entrée - Contrasté"
+
+#: includes/trait-javascript-array.php:1142
+msgid "Fade-out - Translucent"
+msgstr "Fondu en sortie - Transparent"
+
+#: includes/trait-javascript-array.php:1143
+msgid "Fade-out - Liquid"
+msgstr "Fondu en sortie - Liquide"
+
+#: includes/trait-javascript-array.php:1144
+msgid "Fade-out - Soft"
+msgstr "Fondu en sortie - Feutré"
+
+#: includes/trait-javascript-array.php:1145
+msgid "Fade-out - Hard"
+msgstr "Fondu en sortie - Contrasté"
+
+#: includes/trait-javascript-array.php:1146
+msgid "Complementary - Translucent"
+msgstr "Complémentaire - Transparent"
+
+#: includes/trait-javascript-array.php:1147
+msgid "Complementary - Liquid"
+msgstr "Complémentaire - Liquide"
+
+#: includes/trait-javascript-array.php:1148
+msgid "Complementary - Soft"
+msgstr "Complémentaire - Feutré"
+
+#: includes/trait-javascript-array.php:1149
+msgid "Complementary - Hard"
+msgstr "Complémentaire - Contrasté"
+
+#: includes/trait-javascript-array.php:1150
+msgid "Inverted complementary - Translucent"
+msgstr "Complémentaire inverse - Transparent"
+
+#: includes/trait-javascript-array.php:1151
+msgid "Inverted complementary - Liquid"
+msgstr "Complémentaire inverse - Liquide"
+
+#: includes/trait-javascript-array.php:1152
+msgid "Inverted complementary - Soft"
+msgstr "Complémentaire inverse - Feutré"
+
+#: includes/trait-javascript-array.php:1153
+msgid "Inverted complementary - Hard"
+msgstr "Complémentaire inverse - Contrasté"
 
 #: includes/trait-netatmo-client.php:53 includes/trait-netatmo-client.php:114
 msgid "Wrong credentials. Please, verify your login and password."
@@ -1799,15 +2390,15 @@ msgstr ""
 "Identifiants incorrects. Merci de vérifier votre identifiant et votre mot de "
 "passe"
 
-#: includes/trait-netatmo-client.php:119
+#: includes/trait-netatmo-client.php:121
 msgid "Application deactivated. Please contact support."
 msgstr "Application désactivée. Merci de prendre contact avec le support."
 
-#: includes/trait-netatmo-client.php:122
+#: includes/trait-netatmo-client.php:124
 msgid "Too many users with this IP."
 msgstr "Trop d’utilisateurs avec cette adresse IP."
 
-#: includes/trait-netatmo-client.php:125
+#: includes/trait-netatmo-client.php:127
 msgid ""
 "Temporary unable to contact Netatmo servers. Retry will be done shortly."
 msgstr ""
@@ -1866,205 +2457,286 @@ msgstr "[Valeurs Calculées]"
 msgid "Unknonw module"
 msgstr "Module inconnu"
 
-#: includes/trait-type-description.php:64
+#: includes/trait-type-description.php:65
+msgid "Firmware"
+msgstr "Microprogramme"
+
+#: includes/trait-type-description.php:65
 msgid "Firmware version"
 msgstr "Version du microprogramme"
 
-#: includes/trait-type-description.php:70
+#: includes/trait-type-description.php:68
+msgid "Battery"
+msgstr "Batterie"
+
+#: includes/trait-type-description.php:71
+msgid "WiFi"
+msgstr "WiFi"
+
+#: includes/trait-type-description.php:71
 msgid "RF/WiFi signal quality"
 msgstr "Qualité du signal radio/WiFi"
 
-#: includes/trait-type-description.php:73
-msgid "C02 level"
-msgstr "Niveau de CO2"
+#: includes/trait-type-description.php:74
+msgid "C0₂"
+msgstr "C0₂"
 
-#: includes/trait-type-description.php:76
+#: includes/trait-type-description.php:74
+msgid "C0₂ level"
+msgstr "Niveau CO₂"
+
+#: includes/trait-type-description.php:77
+#: includes/trait-type-description.php:80
 #: public/partials/live-weather-station-widget-outdoor-display.php:88
 msgid "Humidity"
 msgstr "Hygrométrie"
 
-#: includes/trait-type-description.php:79
+#: includes/trait-type-description.php:80
 msgid "Reference humidity"
 msgstr "Humidité de référence"
 
-#: includes/trait-type-description.php:82
+#: includes/trait-type-description.php:83
+msgid "Noise"
+msgstr "Bruit"
+
+#: includes/trait-type-description.php:83
 msgid "Noise level"
 msgstr "Niveau de bruit"
 
-#: includes/trait-type-description.php:85
+#: includes/trait-type-description.php:86
+#: includes/trait-type-description.php:89
+msgid "Pressure"
+msgstr "Pression"
+
+#: includes/trait-type-description.php:86
 #: public/partials/live-weather-station-widget-outdoor-display.php:73
 msgid "Atmospheric pressure"
 msgstr "Pression atmosphérique"
 
-#: includes/trait-type-description.php:88
+#: includes/trait-type-description.php:89
 msgid "Pressure trend"
 msgstr "Tendance de la pression"
 
-#: includes/trait-type-description.php:91
+#: includes/trait-type-description.php:92
+#: includes/trait-type-description.php:95
+#: includes/trait-type-description.php:102
+#: includes/trait-type-description.php:106
+#: includes/trait-type-description.php:110
 #: public/partials/live-weather-station-widget-outdoor-display.php:35
 #: public/partials/live-weather-station-widget-outdoor-display.php:58
 msgid "Temperature"
 msgstr "Température"
 
-#: includes/trait-type-description.php:94
+#: includes/trait-type-description.php:95
 msgid "Reference temperature"
 msgstr "Température de référence"
 
-#: includes/trait-type-description.php:97
+#: includes/trait-type-description.php:98
 msgid "Reference wind strength"
 msgstr "Force du vent référence"
 
-#: includes/trait-type-description.php:101
+#: includes/trait-type-description.php:102
 msgid "Highest temperature of the day"
 msgstr "Température maximale de la journée"
 
-#: includes/trait-type-description.php:105
+#: includes/trait-type-description.php:106
 msgid "Lowest temperature of the day"
 msgstr "Température minimale de la journée"
 
-#: includes/trait-type-description.php:109
+#: includes/trait-type-description.php:110
 msgid "Temperature trend"
 msgstr "Tendance de la température"
 
-#: includes/trait-type-description.php:112
+#: includes/trait-type-description.php:113
 #: public/partials/live-weather-station-widget-outdoor-display.php:222
 msgid "Dew point"
 msgstr "Point de rosée"
 
-#: includes/trait-type-description.php:115
+#: includes/trait-type-description.php:116
 #: public/partials/live-weather-station-widget-outdoor-display.php:237
 msgid "Frost point"
 msgstr "Point de givre"
 
-#: includes/trait-type-description.php:118
+#: includes/trait-type-description.php:119
+msgid "Heat"
+msgstr "Chaleur"
+
+#: includes/trait-type-description.php:119
 #: public/partials/live-weather-station-widget-outdoor-display.php:252
 msgid "Heat index"
 msgstr "Indice de chaleur"
 
-#: includes/trait-type-description.php:121
+#: includes/trait-type-description.php:122
 #: public/partials/live-weather-station-widget-outdoor-display.php:266
 msgid "Humidex"
 msgstr "Humidex"
 
-#: includes/trait-type-description.php:124
+#: includes/trait-type-description.php:125
 #: public/partials/live-weather-station-widget-outdoor-display.php:280
 msgid "Wind chill"
 msgstr "Refroidissement éolien"
 
-#: includes/trait-type-description.php:127
+#: includes/trait-type-description.php:128
+msgid "Cloud base"
+msgstr "Base nuages"
+
+#: includes/trait-type-description.php:128
 #: public/partials/live-weather-station-widget-outdoor-display.php:207
 msgid "Cloud base altitude"
 msgstr "Altitude de la base des nuages"
 
-#: includes/trait-type-description.php:132
+#: includes/trait-type-description.php:133
 #: public/partials/live-weather-station-widget-outdoor-display.php:192
 msgid "Cloudiness"
 msgstr "Nébulosité"
 
-#: includes/trait-type-description.php:135
+#: includes/trait-type-description.php:136
+#: includes/trait-type-description.php:143
+#: includes/trait-type-description.php:147
+msgid "Rain"
+msgstr "Pluie"
+
+#: includes/trait-type-description.php:136
 #: public/partials/live-weather-station-widget-outdoor-display.php:140
 #: public/partials/live-weather-station-widget-outdoor-display.php:162
 msgid "Rainfall"
 msgstr "Précipitations"
 
-#: includes/trait-type-description.php:138
+#: includes/trait-type-description.php:139
+msgid "Snow"
+msgstr "Neige"
+
+#: includes/trait-type-description.php:139
 #: public/partials/live-weather-station-widget-outdoor-display.php:177
 msgid "Snowfall"
 msgstr "Chutes de neige"
 
-#: includes/trait-type-description.php:142
+#: includes/trait-type-description.php:143
 msgid "Accumulated rainfall for the last hour"
 msgstr "Cumul des précipitations sur une heure"
 
-#: includes/trait-type-description.php:146
+#: includes/trait-type-description.php:147
 msgid "Accumulated rainfall for today"
 msgstr "Cumul des précipitations de la journée"
 
-#: includes/trait-type-description.php:149
+#: includes/trait-type-description.php:150
 msgid "Wind direction"
 msgstr "Direction du vent"
 
-#: includes/trait-type-description.php:152
+#: includes/trait-type-description.php:153
 msgid "Wind strength"
 msgstr "Force du vent"
 
-#: includes/trait-type-description.php:155
+#: includes/trait-type-description.php:156
 msgid "Gust direction"
 msgstr "Direction des rafales"
 
-#: includes/trait-type-description.php:158
+#: includes/trait-type-description.php:159
 msgid "Gust strength"
 msgstr "Force des rafales"
 
-#: includes/trait-type-description.php:162
+#: includes/trait-type-description.php:163
 msgid "Wind direction for the maximal wind strength for the last hour"
 msgstr "Direction du vent lors de la plus grosse rafale sur une heure"
 
-#: includes/trait-type-description.php:166
+#: includes/trait-type-description.php:167
 msgid "Maximal wind strength for the last hour"
 msgstr "Force maximale du vent sur une heure"
 
-#: includes/trait-type-description.php:170
+#: includes/trait-type-description.php:171
 msgid "Altitude"
 msgstr "Altitude"
 
-#: includes/trait-type-description.php:185
+#: includes/trait-type-description.php:183
+msgid "TZ"
+msgstr "TZ"
+
+#: includes/trait-type-description.php:186
+msgid "all"
+msgstr "tout"
+
+#: includes/trait-type-description.php:186
 msgid "[all measures]"
 msgstr "[toutes les mesures]"
 
-#: includes/trait-type-description.php:188
+#: includes/trait-type-description.php:189
+msgid "outdoor"
+msgstr "Extérieur"
+
+#: includes/trait-type-description.php:189
 msgid "[outdoor measures]"
 msgstr "[mesures extérieures]"
 
-#: includes/trait-type-description.php:191
+#: includes/trait-type-description.php:192
 #: public/partials/live-weather-station-widget-ephemeris-display.php:78
 msgid "Sunrise"
 msgstr "Lever de soleil"
 
-#: includes/trait-type-description.php:194
+#: includes/trait-type-description.php:195
 #: public/partials/live-weather-station-widget-ephemeris-display.php:91
 msgid "Sunset"
 msgstr "Coucher de soleil"
 
-#: includes/trait-type-description.php:197
+#: includes/trait-type-description.php:198
 #: public/partials/live-weather-station-widget-ephemeris-display.php:165
 msgid "Moonrise"
 msgstr "Lever de lune"
 
-#: includes/trait-type-description.php:200
+#: includes/trait-type-description.php:201
 #: public/partials/live-weather-station-widget-ephemeris-display.php:152
 msgid "Moonset"
 msgstr "Coucher de lune"
 
-#: includes/trait-type-description.php:203
+#: includes/trait-type-description.php:204
+msgid "Age"
+msgstr "Âge"
+
+#: includes/trait-type-description.php:204
 msgid "Moon age"
 msgstr "Âge de la lune"
 
-#: includes/trait-type-description.php:206
+#: includes/trait-type-description.php:207
+msgid "Phase"
+msgstr "Phase"
+
+#: includes/trait-type-description.php:207
 msgid "Moon phase"
 msgstr "Phase de la lune"
 
-#: includes/trait-type-description.php:209
+#: includes/trait-type-description.php:210
+msgid "Illumination"
+msgstr "Illumination"
+
+#: includes/trait-type-description.php:210
 msgid "Moon illumination"
 msgstr "Illumination de la lune"
 
-#: includes/trait-type-description.php:212
+#: includes/trait-type-description.php:213
+#: includes/trait-type-description.php:219
+msgid "Distance"
+msgstr "Distance"
+
+#: includes/trait-type-description.php:213
 msgid "Moon distance"
 msgstr "Distance de la lune"
 
-#: includes/trait-type-description.php:215
+#: includes/trait-type-description.php:216
 msgid "Moon angular size"
 msgstr "Taille apparente de la lune"
 
-#: includes/trait-type-description.php:218
+#: includes/trait-type-description.php:219
 msgid "Sun distance"
 msgstr "Distance du soleil"
 
-#: includes/trait-type-description.php:221
+#: includes/trait-type-description.php:222
 msgid "Sun angular size"
 msgstr "Taille apparente du soleil"
 
-#: includes/trait-type-description.php:224
+#: includes/trait-type-description.php:225
+msgid "?"
+msgstr "?"
+
+#: includes/trait-type-description.php:225
 msgid "Unknown measurement"
 msgstr "Mesure inconnue"
 
@@ -2245,13 +2917,13 @@ msgstr "Min & max fixes"
 msgid "Adapted min & max when possible"
 msgstr "Min & max ajustés si possible"
 
-#: public/class-live-weather-station-public.php:100
-#: public/class-live-weather-station-public.php:125
+#: public/class-live-weather-station-public.php:102
+#: public/class-live-weather-station-public.php:127
 msgid "Error code "
 msgstr "Erreur code"
 
-#: public/class-live-weather-station-public.php:104
-#: public/class-live-weather-station-public.php:129
+#: public/class-live-weather-station-public.php:106
+#: public/class-live-weather-station-public.php:131
 msgid "No data"
 msgstr "Aucune donnée"
 
@@ -2311,6 +2983,36 @@ msgstr "Pierre Lannoy"
 #. Author URI of the plugin/theme
 msgid "https://pierre.lannoy.fr"
 msgstr "https://pierre.lannoy.fr"
+
+#~ msgid ""
+#~ "<em>Live Weather Station</em> is a free and open source plugin for "
+#~ "WordPress. It integrates other free and open source works (as-is or "
+#~ "modified) like Weather Icons project by Erik Flowers, EnzoJS by Gerrit "
+#~ "Grunwald, JustGage by Bojan Đuričić, OpenWeatherMap PHP API by Christian "
+#~ "Flach, phpcolors by Arlo Carreon, moonrise/moonset calculation from Matt "
+#~ "\"dxprog\" Hackmann and moon phase calculation from Samir Shah."
+#~ msgstr ""
+#~ "<em>Live Weather Station</em> est un plugin gratuit et open source pour "
+#~ "WordPress. Il incorpore d’autres travaux gratuits et open source tels que "
+#~ "le projet Weather Icons de Erik Flowers, EnzoJS de Gerrit Grunwald, "
+#~ "JustGage de Bojan Đuričić, OpenWeatherMap PHP API de Christian Flach, "
+#~ "phpcolors de Arlo Carreon, les calculs de lever et coucher de lune de "
+#~ "Matt « dxprog » Hackmann et les calculs de phase de la lune de Samir Shah."
+
+#~ msgid "co2"
+#~ msgstr "co2"
+
+#~ msgid "Numerical wind compass"
+#~ msgstr "Compas de vent numérique"
+
+#~ msgid "Complementary"
+#~ msgstr "Complémentaire"
+
+#~ msgid "Inverted complementary"
+#~ msgstr "Complémentaire inversé"
+
+#~ msgid "C02 level"
+#~ msgstr "Niveau de CO2"
 
 #~ msgid ""
 #~ "<em>Live Weather Station</em> is a free and open source plugin for "

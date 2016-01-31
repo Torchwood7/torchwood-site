@@ -14,7 +14,6 @@
 ***********************
 
  * 2.x - Icons dashboard
- * 2.x - Steel series gauges
  * 4.x - Widget with changing background
 
 
@@ -22,6 +21,7 @@
 * FUTURE IMPROVEMENTS *
 ***********************
 
+ * 2.x - Clarification between rain rate and rainfall
  * 3.x - Ability to (re)order displayed datas in controls like LCD Panel
  * 3.x - Ability to set the semantics of wind direction: "coming from..." or "in direction of..."
 

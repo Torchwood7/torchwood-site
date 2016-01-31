@@ -358,10 +358,11 @@ trait Datas_Query {
      * Get sub attributes for some measure types.
      *
      * @param   array   $attributes  An array representing the query.
+     * @param   boolean     $full_mode  For ful aggregated rendering.
      * @return array An array containing all the sub attributes + the attributes.
      * @since    2.1.0
      */
-    private function get_sub_attributes($attributes) {
+    private function get_sub_attributes($attributes, $full_mode=false) {
         $sub_attributes = array();
         switch ($attributes['measure_type']) {
             case 'dew_point':
@@ -392,8 +393,23 @@ trait Datas_Query {
                 $sub_attributes[] = 'temperature';
                 $sub_attributes[] = 'temperature_min';
                 $sub_attributes[] = 'temperature_max';
+                if ($full_mode) {
+                    $sub_attributes[] = 'temperature_trend';
+                }
                 break;
-            case 'sos': // Helper to found names (station and module) in case there's no data form first round
+            case 'pressure':
+                $sub_attributes[] = 'pressure';
+                if ($full_mode) {
+                    $sub_attributes[] = 'pressure_trend';
+                }
+                break;
+            case 'windangle':
+                $sub_attributes[] = 'windangle';
+                if ($full_mode) {
+                    $sub_attributes[] = 'gustangle';
+                }
+                break;
+            case 'sos': // Helper to found names (station and module) in case there's no data from first round
                 $sub_attributes[] = 'temperature';
                 $sub_attributes[] = 'humidity';
                 $sub_attributes[] = 'pressure';
@@ -412,13 +428,14 @@ trait Datas_Query {
      *
      * @param   array   $attributes  An array representing the query.
      * @param   boolean     $obsolescence_filtering     Don't return obsolete data.
+     * @param   boolean     $full_mode  For ful aggregated rendering.
      * @return array An array containing all the datas.
      * @since    2.1.0
      * @access   protected
      */
-    protected function get_line_datas($attributes, $obsolescence_filtering=false) {
+    protected function get_line_datas($attributes, $obsolescence_filtering=false, $full_mode=false) {
         global $wpdb;
-        $sub_attributes = $this->get_sub_attributes($attributes);
+        $sub_attributes = $this->get_sub_attributes($attributes, $full_mode);
         $measures = "";
         if (count($sub_attributes)>0) {
             $i = 0;

@@ -64,6 +64,27 @@ trait Datas_Output {
     }
 
     /**
+     * Stringify an array of labels.
+     *
+     * @return  string  $attributes The attributes of the value queryed by the shortcode.
+     * @since    2.1.0
+     */
+    private function get_txt($source, $val) {
+        $r = '';
+        if (count($source) > 0 && $source[0] != 'none') {
+            foreach ($source as $s) {
+                if (strlen($r) > 0) {
+                    if ($s == 'unit') {$b_sep = ' ('; $e_sep = ')';}
+                    else { $b_sep = ' - '; $e_sep = '';}
+                }
+                else { $b_sep = ''; $e_sep = '';}
+                $r = $r . $b_sep . $val[$s] . $e_sep;
+            }
+        }
+        return $r;
+    }
+
+    /**
      * Get value for clean gauge element.
      *
      * @return  string  $attributes The value queryed.
@@ -81,6 +102,7 @@ trait Datas_Output {
             $max = 0;
             if ($full) {
                 $result['type'] = $this->get_measurement_type($_attributes['measure_type']);
+                $result['shorttype'] = $this->get_measurement_type($_attributes['measure_type'], true);
                 $result['unit'] = $this->output_unit($_attributes['measure_type'])['unit'];
                 $_attributes['measure_type'] = 'sos';
                 $_result = $this->get_line_datas($_attributes, false, true);
@@ -137,6 +159,7 @@ trait Datas_Output {
                 $result['station'] = $master['device_name'];
                 $result['module'] = $master['module_name'];
                 $result['type'] = $this->get_measurement_type($measure_type);
+                $result['shorttype'] = $this->get_measurement_type($measure_type, true);
                 $result['unit'] = $this->output_unit($measure_type)['unit'];
             }
         }
@@ -150,26 +173,6 @@ trait Datas_Output {
         return $result;
     }
 
-    /**
-     * Stringify an array of labels.
-     *
-     * @return  string  $attributes The attributes of the value queryed by the shortcode.
-     * @since    2.1.0
-     */
-    private function get_txt($source, $val) {
-        $r = '';
-        if (count($source) > 0 && $source[0] != 'none') {
-            foreach ($source as $s) {
-                if (strlen($r) > 0) {
-                    if ($s == 'unit') {$b_sep = ' ('; $e_sep = ')';}
-                    else { $b_sep = ' - '; $e_sep = '';}
-                }
-                else { $b_sep = ''; $e_sep = '';}
-                $r = $r . $b_sep . $val[$s] . $e_sep;
-            }
-        }
-        return $r;
-    }
 
     /**
      * Get attributes for clean gauge shortcodes.
@@ -438,6 +441,7 @@ trait Datas_Output {
         return $result;
     }
 
+
     /**
      * Get value for clean gauge shortcodes.
      *
@@ -496,6 +500,563 @@ trait Datas_Output {
         $result .= '    http.send(params);'.PHP_EOL;
         $result .= '  }, '.$time.');'.PHP_EOL;
         $result .= '});'.PHP_EOL;
+        $result .= '</script>'.PHP_EOL;
+        return $result;
+    }
+
+    /**
+     * Get value for steel meter element.
+     *
+     * @return  string  $attributes The value queryed.
+     * @since    2.2.0
+     */
+    public function steelmeter_value($attributes, $full=false)
+    {
+        $_attributes = shortcode_atts(array('device_id' => '', 'module_id' => '', 'measure_type' => '', 'element' => '', 'format' => ''), $attributes);
+        $measure_type = $_attributes['measure_type'];
+        $_result = $this->get_line_datas($_attributes, true, true);
+        $result = array();
+        $result['value'] = 0;
+        $value_min = -9999;
+        $value_max = -9999;
+        $value_trend = 'steady';
+        $value_aux = -9999;
+        $alarm = false;
+        if (empty($_result)) {
+            $value = 0;
+            $precision = 0;
+            $min = 0;
+            $max = 0;
+            if ($full) {
+                $result['type'] = $this->get_measurement_type($_attributes['measure_type']);
+                $result['unit'] = $this->output_unit($_attributes['measure_type'])['unit'];
+                $_attributes['measure_type'] = 'sos';
+                $_result = $this->get_line_datas($_attributes, true, true);
+                $master = $_result[0];
+            }
+        }
+        else {
+            $master = $_result[0];
+            if (count($_result) > 1) {
+                foreach ($_result as $line) {
+                    if ($line['measure_type'] == $_attributes['measure_type']) {
+                        $master = $line;
+                    }
+                    if ($line['measure_type'] == 'temperature_min') {
+                        $value_min = $this->output_value($line['measure_value'], $measure_type);
+                    }
+                    if ($line['measure_type'] == 'temperature_max') {
+                        $value_max = $this->output_value($line['measure_value'], $measure_type);
+                    }
+                    if ($line['measure_type'] == 'temperature_trend' || $line['measure_type'] == 'pressure_trend') {
+                        $value_trend = strtolower($line['measure_value']);
+                        if ($value_trend == 'stable') {
+                            $value_trend = 'steady';
+                        }
+                    }
+                    if ($line['measure_type'] == 'gustangle') {
+                        $value_aux = $this->output_value($line['measure_value'], $measure_type);
+                    }
+                }
+            }
+            $module_type = $master['module_type'];
+            $measure_type = $master['measure_type'];
+            $value = $this->output_value($master['measure_value'], $measure_type);
+            $alarm = $this->is_alarm_on($master['measure_value'], $measure_type);
+            $precision = $this->decimal_for_output($measure_type);
+            $min = round($this->output_value($this->get_measurement_min($measure_type, $module_type), $measure_type));
+            $max = round($this->output_value($this->get_measurement_max($measure_type, $module_type), $measure_type));
+            if ($measure_type == 'temperature' && (get_option('live_weather_station_settings')[7] == 1)) {
+                $min_t = array();
+                $max_t = array();
+                foreach ($_result as $line) {
+                    if ($line['measure_type'] == 'temperature_min') {
+                        $min_t = $line;
+                    }
+                    if ($line['measure_type'] == 'temperature_max') {
+                        $max_t = $line;
+                    }
+                }
+                if (!empty($min_t) && !empty($max_t)) {
+                    $min = $min_t['measure_value'];
+                    $max = $max_t['measure_value'];
+                    $delta = 3 ;
+                    if (strtolower($module_type)=='namodule1' || strtolower($module_type)=='nacurrent') {
+                        $delta = 6 ;
+                    }
+                    if ($min <= $max) {
+                        $min = round($this->output_value($min - $delta, $measure_type));
+                        $max = round($this->output_value($max + $delta, $measure_type));
+                    }
+                }
+            }
+        }
+        if ($full) {
+            $result['type'] = $this->get_measurement_type($measure_type, true);
+            $result['unit'] = $this->output_unit($measure_type)['unit'];
+            $result['decimals'] = $precision;
+            $result['min'] = $min;
+            $result['max'] = $max;
+        }
+        $result['value'] = round($value, $precision);
+        $result['value_min'] = $value_min;
+        $result['value_max'] = $value_max;
+        $result['value_trend'] = $value_trend;
+        $result['value_aux'] = ($value_aux != -9999 ? $value_aux : $result['value'] );
+        $result['alarm'] = $alarm;
+        return $result;
+    }
+
+
+    /**
+     * Get attributes for steel meter shortcodes.
+     *
+     * @return  string  $attributes The attributes of the value queryed by the shortcode.
+     * @since    2.2.0
+     */
+    public function steelmeter_attributes($attributes) {
+        require_once(LWS_INCLUDES_DIR.'phpcolors/Color.php');
+        $result = array();
+        $values = $this->steelmeter_value($attributes, true);
+        $result['minValue'] = $values['min'];
+        $result['maxValue'] = $values['max'];
+        $min = $values['min'];
+        $max = $values['max'];
+        if (strpos($attributes['design'], 'windcompass') !== false ) {
+            $min = 0;
+            $max = 360;
+        }
+        $digital = (strpos($attributes['design'], 'digital') > -1 );
+        if (strpos($attributes['design'], '-1-4') !== false ) {
+            $result['gaugeType'] = 'steelseries.GaugeType.TYPE1';
+        }
+        if (strpos($attributes['design'], '-2-4') !== false ) {
+            $result['gaugeType'] = 'steelseries.GaugeType.TYPE2';
+        }
+        if (strpos($attributes['design'], '-3-4') !== false ) {
+            $result['gaugeType'] = 'steelseries.GaugeType.TYPE3';
+        }
+        if (strpos($attributes['design'], '-4-4') !== false ) {
+            $result['gaugeType'] = 'steelseries.GaugeType.TYPE4';
+        }
+        if (strpos($attributes['design'], '-left') !== false ) {
+            $result['orientation'] = 'steelseries.Orientation.WEST';
+        }
+        if (strpos($attributes['design'], '-right') !== false ) {
+            $result['orientation'] = 'steelseries.Orientation.EAST';
+        }
+        if (strpos($attributes['design'], 'windcompass-modern') !== false ) {
+            $result['pointSymbolsVisible'] = false;
+        }
+        $result['frameDesign'] = 'steelseries.FrameDesign.'.$attributes['frame'];
+        $result['backgroundColor'] = 'steelseries.BackgroundColor.'.$attributes['background'];
+        if ($attributes['orientation'] != 'AUTO') {
+            $result['tickLabelOrientation'] = 'steelseries.TickLabelOrientation.'.$attributes['orientation'];
+        }
+        $result['pointerType'] = 'steelseries.PointerType.'.$attributes['main_pointer_type'];
+        $result['pointerTypeLatest'] = 'steelseries.PointerType.'.$attributes['main_pointer_type'];
+        $result['pointerColor'] = 'steelseries.ColorDef.'.$attributes['main_pointer_color'];
+        $result['pointerTypeAverage'] = 'steelseries.PointerType.'.$attributes['aux_pointer_type'];
+        $result['pointerColorAverage'] = 'steelseries.ColorDef.'.$attributes['aux_pointer_color'];
+        $knob = explode('-',$attributes['knob']);
+        $result['knobType'] = 'steelseries.KnobType.'.$knob[0];
+        $result['knobStyle'] = 'steelseries.KnobStyle.'.$knob[1];
+        if ($attributes['lcd'] == 'NONE') {
+            $result['lcdVisible'] = false;
+        }
+        else {
+            $result['lcdColor'] = 'steelseries.LcdColor.'.$attributes['lcd'];
+        }
+        if ($attributes['alarm'] != 'NONE') {
+            $result['userLedVisible'] = true;
+            $result['userLedColor'] = 'steelseries.LedColor.'.$attributes['alarm'];
+        }
+        if ($attributes['trend'] != 'NONE') {
+            $result['trendVisible'] = true;
+            $result['trendColors'] = '[steelseries.LedColor.'.$attributes['trend'].', steelseries.LedColor.'.$attributes['trend'].', steelseries.LedColor.'.$attributes['trend'].']';
+        }
+        if ($attributes['minmax'] == 'cursor') {
+            $result['minMeasuredValueVisible'] = true;
+            $result['maxMeasuredValueVisible'] = true;
+        }
+        if ($attributes['index_style'] != 'NONE') {
+            $style = explode('-', $attributes['index_style']);
+            $tcolor = new Color(Color::nameToHex($attributes['index_color']));
+            $alpha = 0;
+            $lighten = 1;
+            if (isset($style[1])) {
+                switch (strtolower($style[1])) {
+                    case 'translucent':
+                        $alpha = 0.1;
+                        if ($tcolor->isVeryDark()) {
+                            $lighten = 40;
+                        }
+                        else {
+                            $lighten = 20;
+                        }
+                        break;
+                    case 'liquid':
+                        $alpha = 0.25;
+                        if ($tcolor->isVeryDark()) {
+                            $lighten = 28;
+                        }
+                        else {
+                            $lighten = 15;
+                        }
+                        break;
+                    case 'soft':
+                        $alpha = 0.5;
+                        if ($tcolor->isVeryDark()) {
+                            $lighten = 15;
+                        }
+                        else {
+                            $lighten = 10;
+                        }
+                        break;
+                    case 'hard':
+                        $alpha = 0.9;
+                        $lighten = 1;
+                        break;
+                }
+            }
+            if (isset($style[0])) {
+                switch (strtolower($style[0])) {
+                    case 'fixed':
+                        if ($digital) {
+                            $color = new Color(Color::nameToHex($attributes['index_color']));
+                            $rgb1 = Color::hexToRgb($color->lighten($lighten));
+                            $result['valueGradient'] = 'new steelseries.gradientWrapper('.$min.', '.$max.', [0,1], [new steelseries.rgbaColor('.$rgb1['R'].','.$rgb1['G'].','.$rgb1['B'].', 1), new steelseries.rgbaColor('.$rgb1['R'].','.$rgb1['G'].','.$rgb1['B'].', 1)])';
+                            $result['useValueGradient'] = true;
+                        }
+                        else {
+                            $rgb = Color::nameToRgb($attributes['index_color']);
+                            $result['section'] = '[steelseries.Section('.$min.', '.$max.', "rgba('.$rgb['R'].','.$rgb['G'].','.$rgb['B'].', '.$alpha.')")]';
+                            $result['useSectionColors'] = true;
+                        }
+                        break;
+                    case 'fadein':
+                        if ($digital) {
+                            $color = new Color(Color::nameToHex($attributes['index_color']));
+                            $rgb1 = Color::hexToRgb($color->lighten($lighten*2));
+                            $rgb2 = Color::nameToRgb($attributes['index_color']);
+                            $result['valueGradient'] = 'new steelseries.gradientWrapper('.$min.', '.$max.', [0,1], [new steelseries.rgbaColor('.$rgb1['R'].','.$rgb1['G'].','.$rgb1['B'].', 1), new steelseries.rgbaColor('.$rgb2['R'].','.$rgb2['G'].','.$rgb2['B'].', 1)])';
+                            $result['useValueGradient'] = true;
+                        }
+                        else {
+                            $rgb = Color::nameToRgb($attributes['index_color']);
+                            $s = '';
+                            $step = 20 ;
+                            $size = ($max - $min) / $step;
+                            for ($i = 0; $i < $step; $i++) {
+                                $mi =  ($min + ($i*$size));
+                                $ma =  ($min + (($i+1)*$size));
+                                $a = $alpha - $alpha * ($step - $i) * 0.9 / $step;
+                                $s = $s . 'steelseries.Section('.$mi.', '.$ma.', "rgba('.$rgb['R'].','.$rgb['G'].','.$rgb['B'].', '.$a.')"),';
+                            }
+                            $result['section'] = '['.substr($s, 0, strlen($s)-1).']';
+                            $result['useSectionColors'] = true;
+                        }
+                        break;
+                    case 'fadeout':
+                        if ($digital) {
+                            $color = new Color(Color::nameToHex($attributes['index_color']));
+                            $rgb2 = Color::hexToRgb($color->lighten($lighten*2));
+                            $rgb1 = Color::nameToRgb($attributes['index_color']);
+                            $result['valueGradient'] = 'new steelseries.gradientWrapper('.$min.', '.$max.', [0,1], [new steelseries.rgbaColor('.$rgb1['R'].','.$rgb1['G'].','.$rgb1['B'].', 1), new steelseries.rgbaColor('.$rgb2['R'].','.$rgb2['G'].','.$rgb2['B'].', 1)])';
+                            $result['useValueGradient'] = true;
+                        }
+                        else {
+                            $rgb = Color::nameToRgb($attributes['index_color']);
+                            $s = '';
+                            $step = 20 ;
+                            $size = ($max - $min) / $step;
+                            for ($i = 0; $i < $step; $i++) {
+                                $mi =  ($min + ($i*$size));
+                                $ma =  ($min + (($i+1)*$size));
+                                $a = $alpha - $alpha * $i * 0.9 / $step;
+                                $s = $s . 'steelseries.Section('.$mi.', '.$ma.', "rgba('.$rgb['R'].','.$rgb['G'].','.$rgb['B'].', '.$a.')"),';
+                            }
+                            $result['section'] = '['.substr($s, 0, strlen($s)-1).']';
+                            $result['useSectionColors'] = true;
+                        }
+                        break;
+                    case 'complementary':
+                        if ($digital) {
+                            $color = new Color(Color::nameToHex($attributes['index_color']));
+                            $rgb1 = Color::nameToRgb($attributes['index_color']);
+                            $rgb2 = Color::hexToRgb($color->complementary());
+                            $result['valueGradient'] = 'new steelseries.gradientWrapper('.$min.', '.$max.', [0,1], [new steelseries.rgbaColor('.$rgb1['R'].','.$rgb1['G'].','.$rgb1['B'].', 1), new steelseries.rgbaColor('.$rgb2['R'].','.$rgb2['G'].','.$rgb2['B'].', 1)])';
+                            $result['useValueGradient'] = true;
+                        }
+                        else {
+                            $color2 = new Color(Color::nameToHex($attributes['index_color']));
+                            $color = new Color($color2->complementary());
+                            $rgb2 = $color->complementary();
+                            $s = '';
+                            $step = 20 ;
+                            $size = ($max - $min) / $step;
+                            for ($i = 0; $i < $step; $i++) {
+                                $rgb = Color::hexToRgb($color->mix($rgb2, round((200 / $step) * $i)-100));
+                                $mi =  ($min + ($i*$size));
+                                $ma =  ($min + (($i+1)*$size));
+                                $s = $s . 'steelseries.Section('.$mi.', '.$ma.', "rgba('.$rgb['R'].','.$rgb['G'].','.$rgb['B'].', '.$alpha.')"),';
+                            }
+                            $result['section'] = '['.substr($s, 0, strlen($s)-1).']';
+                            $result['useSectionColors'] = true;
+                        }
+                        break;
+                    case 'invcomplementary':
+                        if ($digital) {
+                            $color = new Color(Color::nameToHex($attributes['index_color']));
+                            $rgb2 = Color::nameToRgb($attributes['index_color']);
+                            $rgb1 = Color::hexToRgb($color->complementary());
+                            $result['valueGradient'] = 'new steelseries.gradientWrapper('.$min.', '.$max.', [0,1], [new steelseries.rgbaColor('.$rgb1['R'].','.$rgb1['G'].','.$rgb1['B'].', 1), new steelseries.rgbaColor('.$rgb2['R'].','.$rgb2['G'].','.$rgb2['B'].', 1)])';
+                            $result['useValueGradient'] = true;
+                        }
+                        else {
+                            $color = new Color(Color::nameToHex($attributes['index_color']));
+                            $rgb2 = $color->complementary();
+                            $s = '';
+                            $step = 20 ;
+                            $size = ($max - $min) / $step;
+                            for ($i = 0; $i < $step; $i++) {
+                                $rgb = Color::hexToRgb($color->mix($rgb2, round((200 / $step) * $i)-100));
+                                $mi =  ($min + ($i*$size));
+                                $ma =  ($min + (($i+1)*$size));
+                                $s = $s . 'steelseries.Section('.$mi.', '.$ma.', "rgba('.$rgb['R'].','.$rgb['G'].','.$rgb['B'].', '.$alpha.')"),';
+                            }
+                            $result['section'] = '['.substr($s, 0, strlen($s)-1).']';
+                            $result['useSectionColors'] = true;
+                        }
+                        break;
+                }
+            }
+        }
+        else {
+            if ($digital) {
+                $rgb = Color::nameToRgb('antiquewhite');
+                $result['valueGradient'] = 'new steelseries.gradientWrapper('.$min.', '.$max.', [0,1], [new steelseries.rgbaColor('.$rgb['R'].','.$rgb['G'].','.$rgb['B'].', 1), new steelseries.rgbaColor('.$rgb['R'].','.$rgb['G'].','.$rgb['B'].', 1)])';
+                $result['useValueGradient'] = true;
+            }
+        }
+        $result['foregroundType'] = 'steelseries.ForegroundType.'.$attributes['glass'];
+        switch ($attributes['size']) {
+            case 'small':
+                $result['size'] = 150;
+                break;
+            case 'medium':
+                $result['size'] = 200;
+                break;
+            case 'large':
+                $result['size'] = 250;
+                break;
+            case 'macro':
+                $result['size'] = 300;
+                break;
+        }
+        $result['thresholdVisible'] = false;
+        $result['ledVisible'] = false;
+        $result['niceScale'] = false;
+        if ($digital) {
+            $result['valueColor'] = 'steelseries.ColorDef.WHITE';
+        }
+        $result['lcdDecimals'] = $values['decimals'];
+        $result['titleString'] = '"'.$values['type'].'"';
+        $result['unitString'] = '"• '.$values['unit'].' •"';
+        $result['digitalFont'] = true;
+        if (strpos($attributes['design'], 'digital') !== false ) {
+            unset($result['titleString']);
+            $result['unitString'] = '"'.$values['type'].' • '.$values['unit'].'"';
+        }
+        if (strpos($attributes['design'], 'meter-') !== false ) {
+            unset($result['titleString']);
+            $result['niceScale'] = true;
+        }
+        if (strpos($attributes['design'], 'windcompass') !== false ) {
+            unset($result['titleString']);
+            unset($result['unitString']);
+            $result['lcdTitleStrings'] = '["'.__('Wind', 'live-weather-station').'", "'.__('Gust', 'live-weather-station').'"]';
+        }
+        if (strpos($attributes['design'], 'altimeter') !== false ) {
+            unset($result['titleString']);
+            $result['unitString'] = '"'.$values['type'].'"';
+        }
+
+        if (strpos($attributes['design'], 'windcompass-vintage') !== false ) {
+            $result['roseVisible'] = true;
+            $result['degreeScale'] = false;
+        }
+        if (strpos($attributes['design'], 'windcompass-standard') !== false ) {
+            $result['roseVisible'] = true;
+        }
+        return $result;
+    }
+
+
+    /**
+     * Get value for steel meter shortcodes.
+     *
+     * @return  string  $attributes The value queryed by the shortcode.
+     * @since    2.2.0
+     */
+    public function steelmeter_shortcodes($attributes) {
+        $result = '';
+        $fingerprint = uniqid('', true);
+        $uniq = 'ssm'.substr ($fingerprint, count($fingerprint)-6, 80);
+        $time = 1000 * (120 + rand(-20, 20));
+        $_attributes = shortcode_atts( array('device_id' => '','module_id' => '','measure_type' => '','design' => '',
+            'frame' => '','background' => '','orientation' => '','main_pointer_type' => '','main_pointer_color' => '',
+            'aux_pointer_type' => '','aux_pointer_color' => '','knob' => '','lcd' => '','alarm' => '','trend' => '',
+            'minmax' => '','index_style' => '','index_color' => '','glass' => '','size' => ''), $attributes );
+        $_attributes['frame'] = strtoupper($_attributes['frame']);
+        $_attributes['background'] = strtoupper($_attributes['background']);
+        $_attributes['orientation'] = strtoupper($_attributes['orientation']);
+        $_attributes['main_pointer_type'] = strtoupper($_attributes['main_pointer_type']);
+        $_attributes['main_pointer_color'] = strtoupper($_attributes['main_pointer_color']);
+        $_attributes['aux_pointer_type'] = strtoupper($_attributes['aux_pointer_type']);
+        $_attributes['aux_pointer_color'] = strtoupper($_attributes['aux_pointer_color']);
+        $_attributes['knob'] = strtoupper($_attributes['knob']);
+        $_attributes['lcd'] = strtoupper($_attributes['lcd']);
+        $_attributes['alarm'] = strtoupper($_attributes['alarm']);
+        $_attributes['trend'] = strtoupper($_attributes['trend']);
+        $_attributes['index_style'] = strtoupper($_attributes['index_style']);
+        $_attributes['index_color'] = strtoupper($_attributes['index_color']);
+        $_attributes['glass'] = strtoupper($_attributes['glass']);
+        $sc_device = $_attributes['device_id'];
+        $sc_module = $_attributes['module_id'];
+        $sc_measurement = $_attributes['measure_type'];
+
+        $params = json_encode($this->steelmeter_attributes($_attributes));
+        $value = $this->steelmeter_value($_attributes);
+
+        $params = str_replace('\"', '!', $params);
+        $params = str_replace('"', '', $params);
+        $params = str_replace('!', '"', $params);
+
+        switch ($attributes['size']) {
+            case 'small':
+                $h = '150px';
+                $w = '150px';
+                break;
+            case 'medium':
+                $h = '200px';
+                $w = '200px';
+                break;
+            case 'large':
+                $h = '250px';
+                $w = '250px';
+                break;
+            case 'macro':
+                $h = '300px';
+                $w = '300px'; 
+                break;
+        }
+        $control = 'Radial';
+        $minmax = false;
+        $alarm = false;
+        $trend = false;
+        $aux = false;
+        if (strpos($attributes['design'], 'analog') !== false ) {
+            $control = 'Radial';
+            $minmax = true;
+            $alarm = true;
+            $trend = true;
+            $aux = false;
+        }
+        if (strpos($attributes['design'], 'digital') !== false ) {
+            $control = 'RadialBargraph';
+            $minmax = false;
+            $alarm = true;
+            $trend = true;
+            $aux = false;
+        }
+        if (strpos($attributes['design'], 'meter-') !== false ) {
+            $control = 'RadialVertical';
+            $minmax = true;
+            $alarm = false;
+            $trend = false;
+            $aux = false;
+        }
+        if (strpos($attributes['design'], 'windcompass') !== false ) {
+            $control = 'WindDirection';
+            $minmax = false;
+            $alarm = false;
+            $trend = false;
+            $aux = true;
+        }
+        if (strpos($attributes['design'], 'altimeter') !== false ) {
+            $control = 'Altimeter';
+            $minmax = false;
+            $alarm = false;
+            $trend = false;
+            $aux = false;
+        }
+
+        $style = 'width:'.$w.';height:'.$h.';';
+        wp_enqueue_script( 'steelseries.js' );
+        $result  = '<canvas id="'.$uniq.'" style="'.$style.'"></canvas>'.PHP_EOL;
+        $result .= '<script language="javascript" type="text/javascript">'.PHP_EOL;
+        $result .= '  jQuery(document).ready(function($) {'.PHP_EOL;
+        $result .= '    var g'.$uniq.' = new steelseries.'.$control.'('.$uniq.', '.$params.');'.PHP_EOL;
+        if ($aux) {
+            $result .= '      g'.$uniq.'.setValueAnimatedLatest('.$value['value'].');'.PHP_EOL;
+            $result .= '      g'.$uniq.'.setValueAnimatedAverage('.$value['value_aux'].');'.PHP_EOL;
+        }
+        else {
+            $result .= '      g'.$uniq.'.setValueAnimated('.$value['value'].', function() {'.PHP_EOL;
+        }
+        if ($alarm) {
+            $result .= '        g'.$uniq.'.blinkUserLed('.$value['alarm'].');'.PHP_EOL;
+        }
+        if ($minmax) {
+            $result .= '        g'.$uniq.'.resetMinMeasuredValue();'.PHP_EOL;
+            $result .= '        g'.$uniq.'.resetMaxMeasuredValue();'.PHP_EOL;
+            if ($value['value_min'] > -9999) {
+                $result .= '        g'.$uniq.'.setMinMeasuredValue('.$value['value_min'].');'.PHP_EOL;
+            }
+            if ($value['value_max'] > -9999) {
+                $result .= '        g'.$uniq.'.setMaxMeasuredValue('.$value['value_max'].');'.PHP_EOL;
+            }
+        }
+        if ($trend) {
+            $result .= '        g'.$uniq.'.setTrend(steelseries.TrendState.'.strtoupper($value['value_trend']).');'.PHP_EOL;
+        }
+        $result .= '        setInterval(function() {'.PHP_EOL;
+        $result .= '          var http = new XMLHttpRequest();'.PHP_EOL;
+        $result .= '          var params = "action=lws_query_steelmeter_datas";'.PHP_EOL;
+        $result .= '          params = params+"&device_id='.$sc_device.'";'.PHP_EOL;
+        $result .= '          params = params+"&module_id='.$sc_module.'";'.PHP_EOL;
+        $result .= '          params = params+"&measure_type='.$sc_measurement.'";'.PHP_EOL;
+        $result .= '          http.open("POST", "/wp-admin/admin-ajax.php", true);'.PHP_EOL;
+        $result .= '          http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");'.PHP_EOL;
+        $result .= '          http.onreadystatechange = function () {'.PHP_EOL;
+        $result .= '            if (http.readyState == 4 && http.status == 200) {'.PHP_EOL;
+        $result .= '              var odatas = JSON.parse(http.responseText);'.PHP_EOL;
+        $result .= '              if ( typeof odatas != "undefined") {'.PHP_EOL;
+        if ($aux) {
+            $result .= '                g'.$uniq.'.setValueAnimatedLatest(odatas.value);'.PHP_EOL;
+            $result .= '                g'.$uniq.'.setValueAnimatedAverage(odatas.value_aux);'.PHP_EOL;
+        }
+        else {
+            $result .= '                g'.$uniq.'.setValueAnimated(odatas.value);'.PHP_EOL;
+        }
+        if ($alarm) {
+            $result .= '                g'.$uniq.'.blinkUserLed(odatas.alarm);'.PHP_EOL;
+        }
+        if ($trend) {
+            $result .= '                if (odatas.value_trend == "up") {g'.$uniq.'.setTrend(steelseries.TrendState.UP);}'.PHP_EOL;
+            $result .= '                if (odatas.value_trend == "down") {g'.$uniq.'.setTrend(steelseries.TrendState.DOWN);}'.PHP_EOL;
+            $result .= '                if (odatas.value_trend == "steady") {g'.$uniq.'.setTrend(steelseries.TrendState.STEADY);}'.PHP_EOL;
+        }
+        $result .= '              }'.PHP_EOL;
+        $result .= '            }'.PHP_EOL;
+        $result .= '          }'.PHP_EOL;
+        $result .= '          http.send(params);'.PHP_EOL;
+        $result .= '        }, '.$time.');'.PHP_EOL;
+        if (!$aux) {
+            $result .= '      });'.PHP_EOL;
+        }
+        $result .= '    });'.PHP_EOL;
         $result .= '</script>'.PHP_EOL;
         return $result;
     }
@@ -1188,7 +1749,7 @@ trait Datas_Output {
         $result = '';
         switch ($type) {
             case 'co2':
-                $result = __('co2', 'live-weather-station') ;
+                $result = __('CO₂', 'live-weather-station') ;
                 break;
             case 'humidity':
                 $result = __('humidity', 'live-weather-station') ;

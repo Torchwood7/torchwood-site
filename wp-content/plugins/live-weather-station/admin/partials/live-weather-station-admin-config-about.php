@@ -41,7 +41,7 @@
                     <td align="left"><span><strong><?php esc_html_e( 'About', 'live-weather-station');?></strong></span></td>
                 </tr>
                 <tr>
-                    <td align="left"> <span><?php echo __( '<em>Live Weather Station</em> is a free and open source plugin for WordPress. It integrates other free and open source works (as-is or modified) like Weather Icons project by Erik Flowers, EnzoJS by Gerrit Grunwald, JustGage by Bojan Đuričić, OpenWeatherMap PHP API by Christian Flach, phpcolors by Arlo Carreon, moonrise/moonset calculation from Matt "dxprog" Hackmann and moon phase calculation from Samir Shah.', 'live-weather-station');?></span><br/>&nbsp;</td>
+                    <td align="left"> <span><?php echo __( '<em>Live Weather Station</em> is a free and open source plugin for WordPress. It integrates other free and open source works (as-is or modified) like Weather Icons project by Erik Flowers, EnzoJS and SteelSeries by Gerrit Grunwald, JustGage by Bojan Đuričić, OpenWeatherMap PHP API by Christian Flach, phpcolors by Arlo Carreon, moonrise/moonset calculation from Matt "dxprog" Hackmann and moon phase calculation from Samir Shah.', 'live-weather-station');?></span><br/>&nbsp;</td>
                 </tr>
                 <tr>
                     <td align="left"><span><strong><?php esc_html_e( 'Data', 'live-weather-station');?></strong></span></td>

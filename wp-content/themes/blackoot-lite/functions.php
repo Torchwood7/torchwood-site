@@ -3,7 +3,7 @@
  *
  * Blackoot Lite WordPress Theme by Iceable Themes | http://www.iceablethemes.com
  *
- * Copyright 2014-2015 Mathieu Sarrasin - Iceable Media
+ * Copyright 2014-2016 Mathieu Sarrasin - Iceable Media
  *
  * Theme's Function
  *
@@ -210,6 +210,12 @@ function blackoot_excerpt_more( $more ) {
 	return '... <div class="read-more navbutton"><a href="'. get_permalink( get_the_ID() ) . '">'. __("Read More", 'blackoot-lite') .'<i class="fa fa-angle-double-right"></i></a></div>';
 }
 add_filter( 'excerpt_more', 'blackoot_excerpt_more' );
+
+function blackoot_content_more( $more ) {
+	global $post;
+	return '<div class="read-more navbutton"><a href="'. get_permalink() . '#more-' . $post->ID . '">'. __("Read More", 'blackoot-lite') .'<i class="fa fa-angle-double-right"></i></a></div>';
+}
+add_filter( 'the_content_more_link', 'blackoot_content_more' );
 
 /*
  * Rewrite and replace wp_trim_excerpt() so it adds a relevant read more link

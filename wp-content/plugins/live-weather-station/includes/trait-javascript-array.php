@@ -399,8 +399,10 @@ use Type_Description;
                     $result[] = array($this->get_measurement_type('signal'), 'signal', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'signal', (array_key_exists('rf_status', $sample) ? $sample['rf_status'] : ''))));
                 }
                 $result[] = array($this->get_measurement_type('rain'), 'rain', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'rain', (array_key_exists('Rain', $sample['measure_values']) ? $sample['measure_values']['Rain'] : ''))));
-                $result[] = array($this->get_measurement_type('rain_hour_aggregated'), 'rain_hour_aggregated', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'rain_hour_aggregated', (array_key_exists('sum_rain_1', $sample['measure_values']) ? $sample['measure_values']['sum_rain_1'] : ''))));
-                $result[] = array($this->get_measurement_type('rain_day_aggregated'), 'rain_day_aggregated', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'rain_day_aggregated', (array_key_exists('sum_rain_24', $sample['measure_values']) ? $sample['measure_values']['sum_rain_24'] : ''))));
+                if ($full || $mono || $aggregated) {
+                    $result[] = array($this->get_measurement_type('rain_hour_aggregated'), 'rain_hour_aggregated', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'rain_hour_aggregated', (array_key_exists('sum_rain_1', $sample['measure_values']) ? $sample['measure_values']['sum_rain_1'] : ''))));
+                    $result[] = array($this->get_measurement_type('rain_day_aggregated'), 'rain_day_aggregated', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'rain_day_aggregated', (array_key_exists('sum_rain_24', $sample['measure_values']) ? $sample['measure_values']['sum_rain_24'] : ''))));
+                }
                 break;
             case 'namodule2': // Wind gauge
                 if ($aggregated) {
@@ -413,8 +415,10 @@ use Type_Description;
                 }
                 $result[] = array($this->get_measurement_type('windangle'), 'windangle', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'windangle', (array_key_exists('WindAngle', $sample['measure_values']) ? $sample['measure_values']['WindAngle'] : ''))));
                 $result[] = array($this->get_measurement_type('windstrength'), 'windstrength', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'windstrength', (array_key_exists('WindStrength', $sample['measure_values']) ? $sample['measure_values']['WindStrength'] : ''))));
-                $result[] = array($this->get_measurement_type('gustangle'), 'gustangle', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'gustangle', (array_key_exists('GustAngle', $sample['measure_values']) ? $sample['measure_values']['GustAngle'] : ''))));
-                $result[] = array($this->get_measurement_type('guststrength'), 'guststrength', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'guststrength', (array_key_exists('GustStrength', $sample['measure_values']) ? $sample['measure_values']['GustStrength'] : ''))));
+                if ($full || $mono || $aggregated) {
+                    $result[] = array($this->get_measurement_type('gustangle'), 'gustangle', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'gustangle', (array_key_exists('GustAngle', $sample['measure_values']) ? $sample['measure_values']['GustAngle'] : ''))));
+                    $result[] = array($this->get_measurement_type('guststrength'), 'guststrength', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'guststrength', (array_key_exists('GustStrength', $sample['measure_values']) ? $sample['measure_values']['GustStrength'] : ''))));
+                }
                 if ($full) {
                     $result[] = array($this->get_measurement_type('windangle_max'), 'windangle_max', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'windangle_max', (array_key_exists('max_wind_angle', $sample['measure_values']['WindHistoric']) ? $sample['measure_values']['WindHistoric']['max_wind_angle'] : ''))));
                     $result[] = array($this->get_measurement_type('windstrength_max'), 'windstrength_max', ($reduced ? array() : $this->get_td_elements($sample, $ts, 'windstrength_max', (array_key_exists('max_wind_str', $sample['measure_values']['WindHistoric']) ? $sample['measure_values']['WindHistoric']['max_wind_str'] : ''))));
@@ -538,7 +542,7 @@ use Type_Description;
                 $sample['place'] = $device['place'];
                 $t_module[] = array ($sample['module_name'], $sample['device_id'], $this->get_td_measure($sample, $full, $aggregated, $reduced, $computed, $mono));
             }
-            if ((($aggregated || $mono) && $netatmo) || $full) {
+            if (( $netatmo) || $full) {
                 $sample = array();
                 $sample['device_id'] = $device['_id'];
                 $sample['device_name'] = $device['station_name'];
@@ -574,22 +578,6 @@ use Type_Description;
             }
             $result[] = array($device['station_name'], $device['_id'], $t_module);
         }
-        return $result;
-    }
-
-    /**
-     * Get the size options for the lcd panel.
-     *
-     * @return  array   An array containing the lcd size options ready to convert to a JS array.
-     * @since    1.0.0
-     * @access   protected
-     */
-    protected function get_lcd_size_js_array() {
-        $result = array();
-        $result[] = array('small',  __('Small', 'live-weather-station'));
-        $result[] = array('medium',  __('Medium', 'live-weather-station'));
-        $result[] = array('large',  __('Large', 'live-weather-station'));
-        $result[] = array('scalable',  __('Scalable', 'live-weather-station'));
         return $result;
     }
 
@@ -676,13 +664,13 @@ use Type_Description;
     }
 
     /**
-     * Get the size options for the clean gauges.
+     * Get the size options for controls.
      *
-     * @return  array   An array containing the clean gauges size options ready to convert to a JS array.
+     * @return  array   An array containing the controls size options ready to convert to a JS array.
      * @since    2.1.0
      * @access   protected
      */
-    protected function get_justgage_size_js_array($micro=false) {
+    protected function get_size_js_array($micro=false, $macro=false, $scalable=true) {
         $result = array();
         if ($micro) {
             $result[] = array('micro',  __('Miniature', 'live-weather-station'));
@@ -690,7 +678,12 @@ use Type_Description;
         $result[] = array('small',  __('Small', 'live-weather-station'));
         $result[] = array('medium',  __('Medium', 'live-weather-station'));
         $result[] = array('large',  __('Large', 'live-weather-station'));
-        $result[] = array('scalable',  __('Scalable', 'live-weather-station'));
+        if ($scalable) {
+            $result[] = array('scalable', __('Scalable', 'live-weather-station'));
+        }
+        if ($macro) {
+            $result[] = array('macro',  __('Gigantic', 'live-weather-station'));
+        }
         return $result;
     }
 
@@ -787,10 +780,12 @@ use Type_Description;
         $result[] = array('none',  __('None', 'live-weather-station'));
         $result[] = array('station',  __('Station name', 'live-weather-station'));
         $result[] = array('module',  __('Module name', 'live-weather-station'));
+        $result[] = array('shorttype',  __('Short measurement type', 'live-weather-station'));
         $result[] = array('type',  __('Measurement type', 'live-weather-station'));
         $result[] = array('unit',  __('Measurement unit', 'live-weather-station'));
         $result[] = array('station-module',  __('Station name', 'live-weather-station').' - '.__('Module name', 'live-weather-station'));
         $result[] = array('module-type',  __('Module name', 'live-weather-station').' - '.__('Measurement type', 'live-weather-station'));
+        $result[] = array('shorttype-unit',  __('Short measurement type', 'live-weather-station').' ('.__('Measurement unit', 'live-weather-station').')');
         $result[] = array('type-unit',  __('Measurement type', 'live-weather-station').' ('.__('Measurement unit', 'live-weather-station').')');
         return $result;
     }
@@ -824,6 +819,338 @@ use Type_Description;
         $result[] = array('#AAAAAA',  __('Test with medium background', 'live-weather-station'));
         $result[] = array('#555555',  __('Test with dark background', 'live-weather-station'));
         $result[] = array('#000000',  __('Test with black background', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the designs options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter designs options ready to convert to a JS array.
+     * @since    2.2.0
+     * @access   protected
+     */
+    protected function get_steelmeter_design_js_array() {
+        $result = array();
+        $result[] = array('analog-1-4',  __('Analog - 1/4', 'live-weather-station'));
+        $result[] = array('analog-2-4',  __('Analog - half', 'live-weather-station'));
+        $result[] = array('analog-3-4',  __('Analog - 3/4', 'live-weather-station'));
+        $result[] = array('analog-4-4',  __('Analog - full', 'live-weather-station'));
+        $result[] = array('digital-1-4',  __('Digital - 1/4', 'live-weather-station'));
+        $result[] = array('digital-2-4',  __('Digital - half', 'live-weather-station'));
+        $result[] = array('digital-3-4',  __('Digital - 3/4', 'live-weather-station'));
+        $result[] = array('digital-4-4',  __('Digital - full', 'live-weather-station'));
+        $result[] = array('meter-top',  __('Top meter', 'live-weather-station'));
+        $result[] = array('meter-left',  __('Left meter', 'live-weather-station'));
+        $result[] = array('meter-right',  __('Right meter', 'live-weather-station'));
+        $result[] = array('windcompass-vintage',  __('Vintage wind compass', 'live-weather-station'));
+        $result[] = array('windcompass-standard',  __('Standard wind compass', 'live-weather-station'));
+        $result[] = array('windcompass-modern',  __('Modern wind compass', 'live-weather-station'));
+        $result[] = array('altimeter-classical',  __('Altimeter', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the bezel options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter bezel options ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_frame_js_array() {
+        $result = array();
+        $result[] = array('BLACK_METAL',  __('Black metal', 'live-weather-station'));
+        $result[] = array('METAL',  __('Metal', 'live-weather-station'));
+        $result[] = array('SHINY_METAL',  __('Shiny metal', 'live-weather-station'));
+        $result[] = array('GLOSSY_METAL',  __('Glossy metal', 'live-weather-station'));
+        $result[] = array('ANTHRACITE',  __('Anthracite', 'live-weather-station'));
+        $result[] = array('TILTED_GRAY',  __('Tilted gray', 'live-weather-station'));
+        $result[] = array('TILTED_BLACK',  __('Tilted black', 'live-weather-station'));
+        $result[] = array('BRASS',  __('Brass', 'live-weather-station'));
+        $result[] = array('STEEL',  __('Steel', 'live-weather-station'));
+        $result[] = array('CHROME',  __('Chrome', 'live-weather-station'));
+        $result[] = array('GOLD',  __('Gold', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the face options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter face options ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_background_js_array() {
+        $result = array();
+        $result[] = array('DARK_GRAY',  __('Dark gray', 'live-weather-station'));
+        $result[] = array('SATIN_GRAY',  __('Satin gray', 'live-weather-station'));
+        $result[] = array('LIGHT_GRAY',  __('Light gray', 'live-weather-station'));
+        $result[] = array('WHITE',  __('White', 'live-weather-station'));
+        $result[] = array('BLACK',  __('Black', 'live-weather-station'));
+        $result[] = array('BEIGE',  __('Beige', 'live-weather-station'));
+        $result[] = array('BROWN',  __('Brown', 'live-weather-station'));
+        $result[] = array('RED',  __('Red', 'live-weather-station'));
+        $result[] = array('GREEN',  __('Green', 'live-weather-station'));
+        $result[] = array('BLUE',  __('Blue', 'live-weather-station'));
+        $result[] = array('ANTHRACITE',  __('Anthracite', 'live-weather-station'));
+        $result[] = array('MUD',  __('Mud', 'live-weather-station'));
+        $result[] = array('PUNCHED_SHEET',  __('Punched sheet', 'live-weather-station'));
+        $result[] = array('CARBON',  __('Carbon', 'live-weather-station'));
+        $result[] = array('STAINLESS',  __('Stainless', 'live-weather-station'));
+        $result[] = array('BRUSHED_METAL',  __('Brushed metal', 'live-weather-station'));
+        $result[] = array('BRUSHED_STAINLESS',  __('Brushed stainless', 'live-weather-station'));
+        $result[] = array('TURNED',  __('Turned', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the glass options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter glass options ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_glass_js_array() {
+        $result = array();
+        $result[] = array('TYPE1',  __('Standard glass', 'live-weather-station'));
+        $result[] = array('TYPE2',  __('Crystal', 'live-weather-station'));
+        $result[] = array('TYPE3',  __('Sapphire crystal', 'live-weather-station'));
+        $result[] = array('TYPE4',  __('Plexiglass', 'live-weather-station'));
+        $result[] = array('TYPE5',  __('Rhodoid', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the pointer options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter pointer options ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_pointer_type_js_array() {
+        $result = array();
+        $result[] = array('TYPE12',  __('Thin triangle', 'live-weather-station'));
+        $result[] = array('TYPE7',  __('Fat Triangle', 'live-weather-station'));
+        $result[] = array('TYPE5',  __('3D triangle', 'live-weather-station'));
+        $result[] = array('TYPE2',  __('Clipped', 'live-weather-station'));
+        $result[] = array('TYPE9',  __('Double clipped', 'live-weather-station'));
+        $result[] = array('TYPE13',  __('Flat clipped', 'live-weather-station'));
+        $result[] = array('TYPE3',  __('Thin rod', 'live-weather-station'));
+        $result[] = array('TYPE14',  __('Fat rod', 'live-weather-station'));
+        $result[] = array('TYPE1',  __('Thin curved triangle', 'live-weather-station'));
+        $result[] = array('TYPE8',  __('3D curved triangle', 'live-weather-station'));
+        $result[] = array('TYPE6',  __('Double needle', 'live-weather-station'));
+        $result[] = array('TYPE10',  __('Culbuto', 'live-weather-station'));
+        $result[] = array('TYPE4',  __('Cessna', 'live-weather-station'));
+        $result[] = array('TYPE11',  __('Volvo', 'live-weather-station'));
+        $result[] = array('TYPE16',  __('Ferrari', 'live-weather-station'));
+        $result[] = array('TYPE15',  __('Ferrari arched', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the pointer color options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter pointer color options ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_pointer_color_js_array() {
+        $result = array();
+        $result[] = array('RED',  __('Red', 'live-weather-station'));
+        $result[] = array('ORANGE',  __('Orange', 'live-weather-station'));
+        $result[] = array('YELLOW',  __('Yellow', 'live-weather-station'));
+        $result[] = array('GREEN',  __('Green', 'live-weather-station'));
+        $result[] = array('JUG_GREEN',  __('JUG Green', 'live-weather-station'));
+        $result[] = array('GREEN_LCD',  __('Green LCD', 'live-weather-station'));
+        $result[] = array('CYAN',  __('Cyan', 'live-weather-station'));
+        $result[] = array('RAITH',  __('Raith', 'live-weather-station'));
+        $result[] = array('BLUE',  __('Blue', 'live-weather-station'));
+        $result[] = array('MAGENTA',  __('Magenta', 'live-weather-station'));
+        $result[] = array('WHITE',  __('White', 'live-weather-station'));
+        $result[] = array('GRAY',  __('Gray', 'live-weather-station'));
+        $result[] = array('BLACK',  __('Black', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the knob  options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter knob options ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_knob_js_array() {
+        $result = array();
+        $result[] = array('STANDARD_KNOB-BLACK',  __('Plain - Black', 'live-weather-station'));
+        $result[] = array('STANDARD_KNOB-BRASS',  __('Plain - Brass', 'live-weather-station'));
+        $result[] = array('STANDARD_KNOB-SILVER',  __('Plain - Silver', 'live-weather-station'));
+        $result[] = array('METAL_KNOB-BLACK',  __('Embossed - Black', 'live-weather-station'));
+        $result[] = array('METAL_KNOB-BRASS',  __('Embossed - Brass', 'live-weather-station'));
+        $result[] = array('METAL_KNOB-SILVER',  __('Embossed - Silver', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the led / trend color options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter led / trend color options ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_led_color_js_array() {
+        $result = array();
+        $result[] = array('none',  __('None', 'live-weather-station'));
+        $result[] = array('RED_LED',  __('Red', 'live-weather-station'));
+        $result[] = array('ORANGE_LED',  __('Orange', 'live-weather-station'));
+        $result[] = array('YELLOW_LED',  __('Yellow', 'live-weather-station'));
+        $result[] = array('GREEN_LED',  __('Green', 'live-weather-station'));
+        $result[] = array('CYAN_LED',  __('Cyan', 'live-weather-station'));
+        $result[] = array('BLUE_LED',  __('Blue', 'live-weather-station'));
+        $result[] = array('MAGENTA_LED',  __('Magenta', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the designs options for the lcd steel meter.
+     *
+     * @return  array   An array containing the lcd designs options for steel meter ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_lcd_design_js_array() {
+        $result = array();
+        $result[] = array('none',  __('None', 'live-weather-station'));
+        $result[] = array(strtoupper('standard'),  __('Standard - Without backlight', 'live-weather-station'));
+        $result[] = array(strtoupper('red'),  __('Translucent - Red', 'live-weather-station'));
+        $result[] = array(strtoupper('orange'),  __('Translucent - Orange', 'live-weather-station'));
+        $result[] = array(strtoupper('beige'),  __('Translucent - Beige', 'live-weather-station'));
+        $result[] = array(strtoupper('yellow'),  __('Translucent - Yellow green', 'live-weather-station'));
+        $result[] = array(strtoupper('standard_green'),  __('Translucent - Standard green', 'live-weather-station'));
+        $result[] = array(strtoupper('blue'),  __('Translucent - Light blue', 'live-weather-station'));
+        $result[] = array(strtoupper('blue_blue'),  __('Translucent - Blue', 'live-weather-station'));
+        $result[] = array(strtoupper('white'),  __('Translucent - White', 'live-weather-station'));
+        $result[] = array(strtoupper('lightblue'),  __('Translucent - Light purple', 'live-weather-station'));
+        $result[] = array(strtoupper('sections'),  __('Translucent - Gray', 'live-weather-station'));
+        $result[] = array(strtoupper('red_darkred'),  __('Contrasted - Red', 'live-weather-station'));
+        $result[] = array(strtoupper('green'),  __('Contrasted - Turquoise', 'live-weather-station'));
+        $result[] = array(strtoupper('gray'),  __('Contrasted - Dark grey', 'live-weather-station'));
+        $result[] = array(strtoupper('black'),  __('Contrasted - Black', 'live-weather-station'));
+        $result[] = array(strtoupper('blue_gray'),  __('Contrasted - Blue', 'live-weather-station'));
+        $result[] = array(strtoupper('darkblue'),  __('Contrasted - Dark blue', 'live-weather-station'));
+        $result[] = array(strtoupper('amber'),  __('Soft - Amber', 'live-weather-station'));
+        $result[] = array(strtoupper('darkgreen'),  __('Soft - Dark green', 'live-weather-station'));
+        $result[] = array(strtoupper('blue_black'),  __('Soft - Blue', 'live-weather-station'));
+        $result[] = array(strtoupper('blue2'),  __('Soft - Dark blue', 'live-weather-station'));
+        $result[] = array(strtoupper('lila'),  __('Soft - Purple', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the min/max color options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter min/max colors options ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_minmax_js_array() {
+        $result = array();
+        $result[] = array('none',  __('None', 'live-weather-station'));
+        $result[] = array('cursor',  __('Cursors', 'live-weather-station'));
+        /*$result[] = array('INT_RED',  __('Inclusive sector - Red', 'live-weather-station'));
+        $result[] = array('INT_ORANGE',  __('Inclusive sector - Orange', 'live-weather-station'));
+        $result[] = array('INT_YELLOW',  __('Inclusive sector - Yellow', 'live-weather-station'));
+        $result[] = array('INT_LIME',  __('Inclusive sector - Lime', 'live-weather-station'));
+        $result[] = array('INT_GREEN',  __('Inclusive sector - Green', 'live-weather-station'));
+        $result[] = array('INT_CYAN',  __('Inclusive sector - Cyan', 'live-weather-station'));
+        $result[] = array('INT_LIGHTBLUE',  __('Inclusive sector - Sky', 'live-weather-station'));
+        $result[] = array('INT_BLUE',  __('Inclusive sector - Blue', 'live-weather-station'));
+        $result[] = array('INT_DARKBLUE',  __('Inclusive sector - Marine', 'live-weather-station'));
+        $result[] = array('INT_MAGENTA',  __('Inclusive sector - Magenta', 'live-weather-station'));
+        $result[] = array('INT_PURPLE',  __('Inclusive sector - Purple', 'live-weather-station'));
+        $result[] = array('INT_WHITE',  __('Inclusive sector - White', 'live-weather-station'));
+        $result[] = array('INT_SILVER',  __('Inclusive sector - Silver', 'live-weather-station'));
+        $result[] = array('INT_GRAY',  __('Inclusive sector - Gray', 'live-weather-station'));
+        $result[] = array('INT_BLACK',  __('Inclusive sector - Black', 'live-weather-station'));
+        $result[] = array('EXC_RED',  __('Exclusive sectors - Red', 'live-weather-station'));
+        $result[] = array('EXC_ORANGE',  __('Exclusive sectors - Orange', 'live-weather-station'));
+        $result[] = array('EXC_YELLOW',  __('Exclusive sectors - Yellow', 'live-weather-station'));
+        $result[] = array('EXC_LIME',  __('Exclusive sectors - Lime', 'live-weather-station'));
+        $result[] = array('EXC_GREEN',  __('Exclusive sectors - Green', 'live-weather-station'));
+        $result[] = array('EXC_CYAN',  __('Exclusive sectors - Cyan', 'live-weather-station'));
+        $result[] = array('EXC_LIGHTBLUE',  __('Exclusive sectors - Sky', 'live-weather-station'));
+        $result[] = array('EXC_BLUE',  __('Exclusive sectors - Blue', 'live-weather-station'));
+        $result[] = array('EXC_DARKBLUE',  __('Exclusive sectors - Marine', 'live-weather-station'));
+        $result[] = array('EXC_MAGENTA',  __('Exclusive sectors - Magenta', 'live-weather-station'));
+        $result[] = array('EXC_PURPLE',  __('Exclusive sectors - Purple', 'live-weather-station'));
+        $result[] = array('EXC_WHITE',  __('Exclusive sectors - White', 'live-weather-station'));
+        $result[] = array('EXC_SILVER',  __('Exclusive sectors - Silver', 'live-weather-station'));
+        $result[] = array('EXC_GRAY',  __('Exclusive sectors - Gray', 'live-weather-station'));
+        $result[] = array('EXC_BLACK',  __('Exclusive sectors - Black', 'live-weather-station'));*/
+        return $result;
+    }
+
+    /**
+     * Get the text orientation options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter text orientation options ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_orientation_js_array() {
+        $result = array();
+        $result[] = array('auto',  __('Automatic', 'live-weather-station'));
+        $result[] = array('NORMAL',  __('Normal', 'live-weather-station'));
+        $result[] = array('HORIZONTAL',  __('Horizontal', 'live-weather-station'));
+        $result[] = array('TANGENT',  __('Tangent', 'live-weather-station'));
+        return $result;
+    }
+
+    /**
+     * Get the radial indicator color options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter radial indicator color options ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_index_color_js_array() {
+        $result = array();
+        $result[] = array('RED',  __('Red', 'live-weather-station'));
+        $result[] = array('MAROON',  __('Maroon', 'live-weather-station'));
+        $result[] = array('ORANGERED',  __('Orange', 'live-weather-station'));
+        $result[] = array('YELLOW',  __('Yellow', 'live-weather-station'));
+        $result[] = array('LIME',  __('Lime', 'live-weather-station'));
+        $result[] = array('GREEN',  __('Green', 'live-weather-station'));
+        $result[] = array('TEAL',  __('Teal', 'live-weather-station'));
+        $result[] = array('AQUA',  __('Aqua', 'live-weather-station'));
+        $result[] = array('LIGHTBLUE',  __('Light blue', 'live-weather-station'));
+        $result[] = array('BLUE',  __('Blue', 'live-weather-station'));
+        $result[] = array('NAVY',  __('Navy', 'live-weather-station'));
+        $result[] = array('FUCHSIA',  __('Fuchsia', 'live-weather-station'));
+        $result[] = array('PURPLE',  __('Purple', 'live-weather-station'));
+        $result[] = array('WHITE',  __('White', 'live-weather-station'));
+        $result[] = array('SILVER',  __('Silver', 'live-weather-station'));
+        $result[] = array('GRAY',  __('Gray', 'live-weather-station'));
+        $result[] = array('BLACK',  __('Black', 'live-weather-station'));
+        return $result;
+    }
+    /**
+     * Get the radial indicator style options for the steel meter.
+     *
+     * @return  array   An array containing the steel meter radial indicator style options ready to convert to a JS array.
+     * @since    2.2.0
+     */
+    protected function get_steelmeter_index_style_js_array() {
+        $result = array();
+        $result[] = array('none',  __('None', 'live-weather-station'));
+        $result[] = array('fixed-translucent',  __('Plain - Translucent', 'live-weather-station'));
+        $result[] = array('fixed-liquid',  __('Plain - Liquid', 'live-weather-station'));
+        $result[] = array('fixed-soft',  __('Plain - Soft', 'live-weather-station'));
+        $result[] = array('fixed-hard',  __('Plain - Hard', 'live-weather-station'));
+        $result[] = array('fadein-translucent',  __('Fade-in - Translucent', 'live-weather-station'));
+        $result[] = array('fadein-liquid',  __('Fade-in - Liquid', 'live-weather-station'));
+        $result[] = array('fadein-soft',  __('Fade-in - Soft', 'live-weather-station'));
+        $result[] = array('fadein-hard',  __('Fade-in - Hard', 'live-weather-station'));
+        $result[] = array('fadeout-translucent',  __('Fade-out - Translucent', 'live-weather-station'));
+        $result[] = array('fadeout-liquid',  __('Fade-out - Liquid', 'live-weather-station'));
+        $result[] = array('fadeout-soft',  __('Fade-out - Soft', 'live-weather-station'));
+        $result[] = array('fadeout-hard',  __('Fade-out - Hard', 'live-weather-station'));
+        $result[] = array('complementary-translucent',  __('Complementary - Translucent', 'live-weather-station'));
+        $result[] = array('complementary-liquid',  __('Complementary - Liquid', 'live-weather-station'));
+        $result[] = array('complementary-soft',  __('Complementary - Soft', 'live-weather-station'));
+        $result[] = array('complementary-hard',  __('Complementary - Hard', 'live-weather-station'));
+        $result[] = array('invcomplementary-translucent',  __('Inverted complementary - Translucent', 'live-weather-station'));
+        $result[] = array('invcomplementary-liquid',  __('Inverted complementary - Liquid', 'live-weather-station'));
+        $result[] = array('invcomplementary-soft',  __('Inverted complementary - Soft', 'live-weather-station'));
+        $result[] = array('invcomplementary-hard',  __('Inverted complementary - Hard', 'live-weather-station'));
         return $result;
     }
 

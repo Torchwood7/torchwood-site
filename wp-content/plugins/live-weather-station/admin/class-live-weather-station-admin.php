@@ -76,6 +76,8 @@ class Live_Weather_Station_Admin {
         wp_enqueue_script( 'lws-lcd.js', LWS_PUBLIC_URL.'js/lws-lcd.min.js', array('jquery'), $this->version, false );
         wp_enqueue_script( 'raphael.js', LWS_PUBLIC_URL.'js/raphael.min.js', array('jquery'), $this->version, false );
         wp_enqueue_script( 'justgage.js', LWS_PUBLIC_URL.'js/justgage.min.js', array('raphael.js'), $this->version, false );
+        wp_enqueue_script( 'tween.js', LWS_PUBLIC_URL.'js/tween.min.js', array(), $this->version, true );
+        wp_enqueue_script( 'steelseries.js', LWS_PUBLIC_URL.'js/steelseries.min.js', array('tween.js'), $this->version, true );
         wp_enqueue_script( 'thickbox' );
 	}
 
@@ -372,27 +374,52 @@ class Live_Weather_Station_Admin {
                 if (count($datas) > 0) {
                     $js_array_textual = $this->get_js_array($datas, true, false, false, true);
                     $js_array_lcd = $this->get_js_array($datas, false, true, true);
-                    $js_array_justgage = $this->get_js_array($datas, false, false, false, true, true);
+                    $js_array_justgage = $this->get_js_array($datas, false, false, true, true, true);
+                    $js_array_steelmeter = $this->get_js_array($datas, false, false, true, true, false);
                 }
                 $js_array_lcd_design = $this->get_lcd_design_js_array();
-                $js_array_lcd_size = $this->get_lcd_size_js_array();
+                $js_array_lcd_size = $this->get_size_js_array();
                 $js_array_lcd_speed = $this->get_lcd_speed_js_array();
 
                 $js_array_justgage_design = $this->get_justgage_design_js_array();
-                $js_array_justgage_size = $this->get_justgage_size_js_array(true);
                 $js_array_justgage_color = $this->get_justgage_color_js_array();
                 $js_array_justgage_pointer = $this->get_justgage_pointer_js_array();
                 $js_array_justgage_title = $this->get_justgage_title_js_array();
                 $js_array_justgage_unit = $this->get_justgage_unit_js_array();
+                $js_array_justgage_size = $this->get_size_js_array(true);
                 $js_array_justgage_background = $this->get_justgage_background_js_array();
+
+                $js_array_steelmeter_design = $this->get_steelmeter_design_js_array();
+                $js_array_steelmeter_frame = $this->get_steelmeter_frame_js_array();
+                $js_array_steelmeter_background = $this->get_steelmeter_background_js_array();
+                $js_array_steelmeter_orientation = $this->get_steelmeter_orientation_js_array();
+                $js_array_steelmeter_glass = $this->get_steelmeter_glass_js_array();
+                $js_array_steelmeter_pointer_type = $this->get_steelmeter_pointer_type_js_array();
+                $js_array_steelmeter_pointer_color = $this->get_steelmeter_pointer_color_js_array();
+                $js_array_steelmeter_knob = $this->get_steelmeter_knob_js_array();
+                $js_array_steelmeter_lcd_color = $this->get_steelmeter_lcd_design_js_array();
+                $js_array_steelmeter_led_color = $this->get_steelmeter_led_color_js_array();
+                $js_array_steelmeter_minmax = $this->get_steelmeter_minmax_js_array();
+                $js_array_steelmeter_index_color = $this->get_steelmeter_index_color_js_array();
+                $js_array_steelmeter_index_style = $this->get_steelmeter_index_style_js_array();
+                $js_array_steelmeter_size = $this->get_size_js_array(false, true, false);
 
                 $status = $this->get_status($oerror != '');
                 $args = compact( 'error', 'warning', 'oerror', 'owarning', 'status', 'temperature', 'pressure', 'wind',
                     'altitude', 'distance', 'mode_options', 'viewing_options', 'obsolescence', 'minmax', 'datas',
-                    'js_array_textual', 'js_array_lcd', 'js_array_lcd_design', 'js_array_lcd_size', 'js_array_lcd_speed',
+
+                    'js_array_textual',
+
+                    'js_array_lcd', 'js_array_lcd_design', 'js_array_lcd_size', 'js_array_lcd_speed',
+
                     'js_array_justgage', 'js_array_justgage_design', 'js_array_justgage_size', 'js_array_justgage_color',
-                    'js_array_justgage_pointer', 'js_array_justgage_title', 'js_array_justgage_unit',
-                    'js_array_justgage_background');
+                    'js_array_justgage_pointer', 'js_array_justgage_title', 'js_array_justgage_unit', 'js_array_justgage_background',
+                
+                    'js_array_steelmeter', 'js_array_steelmeter_design', 'js_array_steelmeter_size', 'js_array_steelmeter_frame',
+                    'js_array_steelmeter_background', 'js_array_steelmeter_orientation', 'js_array_steelmeter_glass',
+                    'js_array_steelmeter_pointer_type', 'js_array_steelmeter_pointer_color', 'js_array_steelmeter_knob',
+                    'js_array_steelmeter_lcd_color', 'js_array_steelmeter_led_color', 'js_array_steelmeter_minmax',
+                    'js_array_steelmeter_index_style', 'js_array_steelmeter_index_color');
                 break;
             case 'add-edit-owm':
                 if (count($station) == 0) {
